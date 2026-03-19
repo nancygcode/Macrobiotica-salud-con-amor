@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="#{page.orderConfirmation.title}">Confirmación de Orden - Salud con Amor</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" th:href="@{/images/image.png}">
+    
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <link rel="stylesheet" th:href="@{/css/cart.css}" />
+</head>
+<body>
+    <!-- HEADER (IGUAL AL TUYO) -->
+    <div th:replace="~{fragments/_header :: header}"></div>
+
+    <!-- CONTENIDO DE CONFIRMACIÓN -->
+    <main class="container">
+        <div class="confirmation-container">
+            <div class="confirmation-card">
+                <!-- Encabezado de éxito -->
+                <div class="confirmation-header">
+                    <div class="success-icon">✅</div>
+                    <h1 class="confirmation-title" th:text="#{order.confirmation.title}">¡Orden Confirmada!</h1>
+                    <p class="confirmation-subtitle" th:text="#{order.confirmation.subtitle}">Gracias por tu compra en Salud con Amor</p>
+                </div>
+
+                <!-- Resumen rápido -->
+                <div class="order-overview">
+                    <div class="order-overview-item">
+                        <span class="overview-label" th:text="#{order.number}">Número de Orden:</span>
+                        <span class="overview-value" th:text="'#' + ${order.id}"></span>
+                    </div>
+                    <div class="order-overview-item">
+                        <span class="overview-label" th:text="#{order.date}">Fecha:</span>
+                        <span class="overview-value" th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy HH:mm')}"></span>
+                    </div>
+                    <div class="order-overview-item">
+                        <span class="overview-label" th:text="#{order.total}">Total:</span>
+                        <span class="overview-value total-amount" th:text="${order.formattedTotalAmount}"></span>
+                    </div>
+                </div>
+
+                <!-- Detalles completos -->
+                <div class="order-details">
+                    <div class="details-section">
+                        <h3 class="section-title" th:text="#{order.shipping.info}">📦 Información de Envío</h3>
+                        <div class="shipping-info">
+                            <p><strong th:text="#{order.shipping.address}">Dirección:</strong> <span th:text="${order.shippingAddress}"></span></p>
+                            <p><strong th:text="#{order.shipping.method}">Método de envío:</strong> <span th:text="${order.shippingMethod}"></span></p>
+                        </div>
+                    </div>
+
+                    <div class="order-section">
+                        <h3 class="section-title" th:text="#{order.payment.info}">💳 Información de Pago</h3>
+                        <div class="payment-info">
+                            <p><strong th:text="#{order.payment.method}">Método de pago:</strong> <span th:text="${order.paymentMethod}"></span></p>
+                            <p><strong th:text="#{order.status}">Estado:</strong> <span class="status-badge" th:text="${order.status}"></span></p>
+                        </div>
+                    </div>
+
+                    <div class="details-section">
+                        <h3 class="section-title" th:text="#{order.products}">🛍️ Productos</h3>
+                        <div class="order-items-list">
+                            <div th:each="item : ${order.items}" class="order-item-detailed">
+                                <div class="item-main">
+                                    <img th:src="@{/images/{file}(file=${item.product.imageUrl})}" 
+                                         alt="Producto" 
+                                         class="item-image"
+                                         onerror="this.src='/images/placeholder-product.jpg'">
+                                    <div class="item-info">
+                                        <h4 class="item-name" th:text="${item.product.name}"></h4>
+                                        <div class="item-meta">
+                                            <span class="item-category" th:text="${item.product.category}"></span>
+                                            <span class="item-quantity" th:text="#{order.quantity} + ': ' + ${item.quantity}">Cantidad: </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="item-pricing">
+                                    <div class="item-price" th:text="${item.product.formattedPrice}"></div>
+                                    <div class="item-subtotal" th:text="${item.formattedSubtotal}"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resumen final -->
+                <div class="final-summary">
+                    <div class="summary-totals">
+                        <div class="total-line">
+                            <span th:text="#{order.final.total}">Total del pedido:</span>
+                            <span th:text="${order.formattedTotalAmount}"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Acciones -->
+                <div class="confirmation-actions">
+                    <a th:href="@{/productos}" class="btn btn-primary">
+                        <span class="btn-icon">🛍️</span>
+                        <span th:text="#{order.actions.keepShopping}">Seguir Comprando</span>
+                    </a>
+                    <a th:href="@{/}" class="btn btn-secondary">
+                        <span class="btn-icon">🏠</span>
+                        <span th:text="#{order.actions.backHome}">Volver al Inicio</span>
+                    </a>
+                </div>
+
+                <!-- Información adicional -->
+                <div class="additional-info">
+                    <div class="info-card">
+                        <h4 th:text="#{order.info.whatsNext.title}">📧 ¿Qué sigue?</h4>
+                        <p th:text="#{order.info.whatsNext.message}">Recibirás un correo electrónico de confirmación con los detalles de tu pedido y información de seguimiento.</p>
+                    </div>
+                    <div class="info-card">
+                        <h4 th:text="#{order.info.help.title}">📞 ¿Necesitas ayuda?</h4>
+                        <p><span th:text="#{order.info.help.message}">Si tienes alguna pregunta sobre tu pedido, contáctanos a</span> <strong>info@saludconamor.com</strong></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER (IGUAL AL TUYO) -->
+    <div th:replace="~{fragments/_footer :: footer}"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animación de entrada
+            const confirmationCard = document.querySelector('.confirmation-card');
+            confirmationCard.style.opacity = '0';
+            confirmationCard.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                confirmationCard.style.transition = 'all 0.5s ease';
+                confirmationCard.style.opacity = '1';
+                confirmationCard.style.transform = 'translateY(0)';
+            }, 100);
+        });
+    </script>
+</body>
+</html>

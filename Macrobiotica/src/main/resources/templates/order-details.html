@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{order.id} + ${order.id} + ' - Salud con Amor'">Detalles del Pedido - Salud con Amor</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/orders.css}">
+    <link rel="stylesheet" th:href="@{/css/order-details.css}">
+    <link rel="stylesheet" th:href="@{/css/utilities.css}">
+</head>
+<body>
+    <!-- Header -->
+    <div th:replace="~{fragments/_header :: header}"></div>
+
+    <main class="orders-container order-details-page">
+        <div class="orders-header">
+            <h1 th:text="#{order.details.title}">Detalles del Pedido</h1>
+            <p><span th:text="#{order.id}">Pedido #</span><span th:text="${order.id}">12345</span> - 
+               <span th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy HH:mm')}">01/12/2024 14:30</span></p>
+        </div>
+
+        <nav class="orders-nav">
+            <a th:href="@{/orders}" th:text="#{order.details.nav.back}">← Volver a Pedidos</a>
+            <a th:href="@{/order-history}" th:text="#{order.details.nav.history}">Historial</a>
+            <a th:href="@{/invoices}" th:text="#{order.details.nav.invoices}">Facturas</a>
+            <a th:href="@{/contact(orderId=${order.id})}" th:text="#{order.details.nav.support}">Solicitar Soporte</a>
+        </nav>
+
+        <div class="detail-section">
+            <h3 th:text="#{order.details.status.title}">Estado del Pedido</h3>
+            <div class="order-status-large" th:classappend="'status-' + ${order.status?.toLowerCase()}" 
+                 th:text="${order.status}">ENTREGADO</div>
+            
+            <div class="tracking-steps">
+                <div class="step" th:classappend="${order.status == 'PENDING' or order.status == 'PROCESSING' or order.status == 'SHIPPED' or order.status == 'DELIVERED'} ? 'completed' : ''">
+                    <div class="step-icon">📦</div>
+                    <div class="step-label" th:text="#{order.tracking.confirmed}">Confirmado</div>
+                </div>
+                <div class="step" th:classappend="${order.status == 'PROCESSING' or order.status == 'SHIPPED' or order.status == 'DELIVERED'} ? 'completed' : ''">
+                    <div class="step-icon">🔧</div>
+                    <div class="step-label" th:text="#{order.tracking.processing}">En Proceso</div>
+                </div>
+                <div class="step" th:classappend="${order.status == 'SHIPPED' or order.status == 'DELIVERED'} ? 'completed' : ''">
+                    <div class="step-icon">🚚</div>
+                    <div class="step-label" th:text="#{order.tracking.shipped}">Enviado</div>
+                </div>
+                <div class="step" th:classappend="${order.status == 'DELIVERED'} ? 'completed' : ''">
+                    <div class="step-icon">✅</div>
+                    <div class="step-label" th:text="#{order.tracking.delivered}">Entregado</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="detail-section">
+            <h3 th:text="#{order.details.products.title}">Productos</h3>
+            <table class="items-table">
+                <thead>
+                    <tr>
+                        <th th:text="#{order.table.product}">Producto</th>
+                        <th th:text="#{order.table.quantity}">Cantidad</th>
+                        <th th:text="#{order.table.unit.price}">Precio Unitario</th>
+                        <th th:text="#{order.table.subtotal}">Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="item : ${order.items}">
+                        <td th:text="${item.product?.name}">Proteína Whey</td>
+                        <td th:text="${item.quantity}">2</td>
+                        <td th:text="'₡' + ${#numbers.formatDecimal(item.unitPrice, 1, 2)}">₡22,500.00</td>
+                        <td th:text="'₡' + ${#numbers.formatDecimal(item.unitPrice * item.quantity, 1, 2)}">₡45,000.00</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr class="total-row">
+                        <td colspan="3" class="text-right"><strong th:text="#{order.table.total}">Total:</strong></td>
+                        <td th:text="${order.formattedTotalAmount}"><strong>₡45,000.00</strong></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="detail-section">
+            <h3 th:text="#{order.shipping.info.title}">Información de Envío</h3>
+            <div class="shipping-info">
+                <p><strong th:text="#{order.shipping.address}">Dirección:</strong> <span th:text="${order.shippingAddress}">San José, Costa Rica</span></p>
+                <p><strong th:text="#{order.shipping.method}">Método de envío:</strong> <span th:text="${order.shippingMethod}">Envío Estándar</span></p>
+                <p><strong th:text="#{order.payment.method}">Método de pago:</strong> <span th:text="${order.paymentMethod}">Tarjeta de Crédito</span></p>
+            </div>
+        </div>
+
+        <div class="invoice-actions">
+            <button class="btn-print" onclick="window.print()" th:text="#{order.print.receipt}">🖨️ Imprimir Comprobante</button>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div th:replace="~{fragments/_footer :: footer}"></div>
+
+</body>
+</html>

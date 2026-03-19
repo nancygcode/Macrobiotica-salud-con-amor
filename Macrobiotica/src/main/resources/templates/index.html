@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <title th:text="#{page.home.title}">Salud con Amor - Inicio</title>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+            rel="stylesheet">
+        <link rel="icon" type="image/x-icon" th:href="@{/images/image.png}">
+
+        <!-- Use Thymeleaf resource URL syntax; static files live in /static -->
+        <link rel="stylesheet" th:href="@{/css/styles.css}" />
+        <link rel="stylesheet" th:href="@{/css/cart.css}" />
+    </head>
+
+    <body>
+        <!-- HEADER -->
+        <div th:replace="~{fragments/_header :: header}"></div>        <!-- HERO -->
+        <section class="hero">
+            <div class="hero-inner">
+                <div class="hero-copy">
+                    <h1 th:text="#{hero.title}">Invierte en tu salud de manera valiosa: tu cuerpo merece lo natural</h1>
+                    <p class="hero-sub" th:text="#{hero.subtitle}">Consigue productos de alta calidad con ingredientes naturales y el mejor precio.</p>
+                    <div class="hero-cta">
+                        <a class="btn btn-primary" href="/productos" th:text="#{hero.cta}">Empezar a comprar</a>
+                    </div>
+
+                    <div class="hero-highlights">
+                        <div class="highlight" th:text="#{hero.discount}">Hasta 25% de descuento</div>
+                        <div class="highlight" th:text="#{hero.shipping}">Envíos a todo el país</div>
+                        <div class="highlight" th:text="#{hero.consultation}">Consulta a un profesional</div>
+                        <div class="highlight" th:text="#{hero.tips}">Consejos de Salud</div>
+                    </div>
+                </div>
+
+                <div class="hero-visual">
+                    <img th:src="@{/images/42dd9669a5a88b38f5ff170d1f3eb97e6ea4fc2a.png}" alt="Doctor" />
+                </div>
+            </div>
+        </section>
+
+        <!-- PRODUCTOS POPULARES -->
+        <main class="container">
+            <section class="section products-section">
+                <div class="section-header">
+                    <h2 th:text="#{section.popular}">Productos populares</h2>
+                    <a class="cta-link" href="/productos/populares" th:text="#{section.viewAll} + ' →'">Ver todos →</a>
+                </div>
+                <div class="products-grid" th:if="${popularProducts}">
+                    <article class="product-card" th:each="p : ${popularProducts}">
+                        <a th:href="@{/producto/{id}(id=${p.id})}" class="product-link">
+                            <img th:src="@{/images/{file}(file=${p.imageUrl})}" th:alt="${p.name}" />
+                            <h3 th:text="${p.name}">Nombre</h3>
+                            <p class="price" th:text="${p.price}">₡0.00</p>
+                        </a>
+                        <form th:action="@{/cart/add}" method="post" class="add-to-cart-form">
+                            <input type="hidden" name="productId" th:value="${p.id}">
+                            <input type="hidden" name="quantity" value="1">
+                            <button type="submit" class="add">
+                                🛒 <span th:text="#{button.addToCart.text}">Añadir al carrito</span>
+                            </button>
+                        </form>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section products-section">
+                <div class="section-header">
+                    <h2 th:text="#{section.new}">Productos nuevos</h2>
+                    <a class="cta-link" href="/productos/nuevos" th:text="#{section.viewAll} + ' →'">Ver todos →</a>
+                </div>
+
+                <div class="products-grid" th:if="${newProducts}">
+                    <article class="product-card" th:each="p : ${newProducts}">
+                        <a th:href="@{/producto/{id}(id=${p.id})}" class="product-link">
+                            <img th:src="@{/images/{file}(file=${p.imageUrl})}" th:alt="${p.name}" />
+                            <h3 th:text="${p.name}">Nombre</h3>
+                            <p class="price" th:text="${p.price}">₡0.00</p>
+                        </a>
+                    <form th:action="@{/cart/add}" method="post" class="add-to-cart-form">
+                        <input type="hidden" name="productId" th:value="${p.id}">
+                        <input type="hidden" name="quantity" value="1">
+                        <button type="submit" class="add">
+                            🛒 <span th:text="#{button.addToCart.text}">Añadir al carrito</span>
+                        </button>
+                    </form>
+                    </article>
+                </div>
+            </section>
+
+            <!-- SECCION PROMOCIONAL GRANDE -->
+            <section class="promo-large">
+                <div class="promo-inner">
+                    <div class="promo-left">
+                        <span class="badge">Hasta 50% de descuento</span>
+                        <h3>Oferta del día: medicina natural</h3>
+                        <p>Encuentra lo mejor en suplementos naturales seleccionados para ti.</p>
+                        <a class="btn btn-secondary" href="/productos/populares" th:text="#{order.continueShopping}">Compra ahora</a>
+                    </div>
+                    <div class="promo-right">
+                        <img th:src="@{/images/promo.jpg}" alt="Promoción" />
+                    </div>
+                </div>
+            </section>
+
+
+            <section class="section products-section">
+                <div class="section-header">
+                    <h2 th:text="#{section.suplementos}">Suplementos</h2>
+                    <a class="cta-link" href="/productos/suplementos" th:text="#{section.viewAll} + ' →'">Ver todos →</a>
+                </div>
+
+                <div class="products-grid" th:if="${suplementos}">
+                    <article class="product-card" th:each="p : ${suplementos}">
+                        <a th:href="@{/producto/{id}(id=${p.id})}" class="product-link">
+                            <img th:src="@{/images/{file}(file=${p.imageUrl})}" th:alt="${p.name}" />
+                            <h3 th:text="${p.name}">Nombre</h3>
+                            <p class="price" th:text="${p.price}">₡0.00</p>
+                        </a>
+                    <form th:action="@{/cart/add}" method="post" class="add-to-cart-form">
+                        <input type="hidden" name="productId" th:value="${p.id}">
+                        <input type="hidden" name="quantity" value="1">
+                        <button type="submit" class="add">
+                            🛒 <span th:text="#{button.addToCart.text}">Añadir al carrito</span>
+                        </button>
+                    </form>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section products-section">
+                <div class="section-header">
+                    <h2 th:text="#{section.vitaminas}">Vitaminas</h2>
+                    <a class="cta-link" href="/productos/vitaminas" th:text="#{section.viewAll} + ' →'">Ver todos →</a>
+                </div>
+
+                <div class="products-grid" th:if="${vitaminas}">
+                    <article class="product-card" th:each="p : ${vitaminas}">
+                        <a th:href="@{/producto/{id}(id=${p.id})}" class="product-link">
+                            <img th:src="@{/images/{file}(file=${p.imageUrl})}" th:alt="${p.name}" />
+                            <h3 th:text="${p.name}">Nombre</h3> 
+                            <p class="price" th:text="${p.price}">₡0.00</p>
+                        </a>
+                        <form th:action="@{/cart/add}" method="post" class="add-to-cart-form">
+                            <input type="hidden" name="productId" th:value="${p.id}">
+                            <input type="hidden" name="quantity" value="1">
+                            <button type="submit" class="add">
+                                🛒 <span th:text="#{button.addToCart.text}">Añadir al carrito</span>
+                            </button>
+                        </form>
+                    </article>
+                </div>
+            </section>
+            <!-- BLOG / INFORMACIÓN -->
+            <section class="section blog-section">
+                <div class="section-header">
+                    <h2 th:text="#{section.blog}">Blogs e información</h2>
+                </div>
+
+                <div class="blog-grid" th:if="${recentBlogs != null and !recentBlogs.isEmpty()}">
+                    <article class="blog-card" th:each="blog : ${recentBlogs}">
+                        <img th:src="@{/images/{file}(file=${blog.imageUrl})}" th:alt="${blog.title}" />
+                        <div class="blog-info">
+                            <h4 th:text="${blog.title}">Título del blog</h4>
+                            <p th:text="${blog.summary}">Resumen del blog...</p>
+                            <a th:href="@{/blog/{id}(id=${blog.id})}" class="read-more" th:text="#{blog.readMore}">Leer más →</a>
+                        </div>
+                    </article>
+                </div>
+                
+                <!-- Mensaje si no hay blogs -->
+                <div th:if="${recentBlogs == null or recentBlogs.isEmpty()}" class="no-blogs-message">
+                    <p th:text="#{blog.noBlogsHome}">No hay blogs disponibles actualmente.</p>
+                </div>
+            </section>
+        </main>
+
+        <!-- FOOTER -->
+        <div th:replace="~{fragments/_footer :: footer}"></div>
+    </body>
+</html>
