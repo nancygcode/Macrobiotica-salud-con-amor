@@ -9,7 +9,7 @@ public class Prueba {
 
 @GetMapping("/")
 public String getMethodName() {
-    return "a   ";
+    return "a";
 }
 
 }
