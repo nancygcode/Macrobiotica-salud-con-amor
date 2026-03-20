@@ -389,7 +389,15 @@
         // Helper to format Date to YYYY-MM-DD for input[type=date]
         function formatDateForInput(dateStr) {
             if (!dateStr) return '';
+            // Validar si es string tipo fecha corta 'YYYY-MM-DD'
+            if (typeof dateStr === 'string' && dateStr.length >= 10 && dateStr.includes('-')) {
+                return dateStr.substring(0, 10);
+            }
+            
             const d = new Date(dateStr);
+            // Ajustar el desfase horario si recibe timestamp u objeto JS
+            d.setMinutes(d.getMinutes() + d.getTimezoneOffset());
+            
             let month = '' + (d.getMonth() + 1);
             let day = '' + d.getDate();
             const year = d.getFullYear();
@@ -429,8 +437,12 @@
             
             // Fecth data via AJAX
             fetch('/facturas-proveedor/editar/' + id)
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) { throw new Error('Network response was not ok'); }
+                    return response.json();
+                })
                 .then(data => {
+                    console.log('Datos cargados:', data); // de-bug logging
                     document.getElementById('numeroFactura').value = data.numeroFactura;
                     document.getElementById('codigoProvedor').value = data.codigoProvedor;
                     document.getElementById('idProducto').value = data.idProducto;

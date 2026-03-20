@@ -12,10 +12,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/facturas-proveedor")
@@ -62,7 +62,8 @@ public class FacturacionProvedorController {
 
     @GetMapping("/editar/{id}")
     @ResponseBody
-    public Optional<FacturacionProvedor> buscarFactura(@PathVariable Long id) {
-        return service.buscarPorId(id);
+    public ResponseEntity<FacturacionProvedor> buscarFactura(@PathVariable("id") Long id) {
+        return service.buscarPorId(id).map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
