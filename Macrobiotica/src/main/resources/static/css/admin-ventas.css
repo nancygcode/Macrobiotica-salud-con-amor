@@ -1,0 +1,286 @@
+/* ===== ADMIN VENTAS CSS ===== */
+/* Mismo lenguaje visual que facturas-provedor.html */
+
+:root {
+    --primary-bg: #f8fafc;
+    --card-bg: #ffffff;
+    --accent-green: #10b981;
+    --accent-green-hover: #059669;
+    --accent-blue: #3b82f6;
+    --text-main: #1f2937;
+    --text-muted: #6b7280;
+    --border-color: #e5e7eb;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+body {
+    font-family: 'Outfit', 'Poppins', sans-serif;
+    background-color: var(--primary-bg);
+    color: var(--text-main);
+    margin: 0;
+    padding: 2rem 0;
+    min-height: 100vh;
+}
+
+/* ── Contenedor principal ── */
+.ventas-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+/* ── Encabezado de sección ── */
+.ventas-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    animation: fadeInDown 0.6s ease-out;
+}
+
+.ventas-header h2 {
+    font-weight: 700;
+    font-size: 2.2rem;
+    margin: 0;
+    background: linear-gradient(135deg, #1f2937, #059669);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* ── Tarjetas de métricas (KPIs) ── */
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    animation: fadeIn 0.7s ease-out;
+}
+
+.kpi-card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 1.5rem 2rem;
+    box-shadow: var(--shadow-md);
+    border-top: 4px solid var(--accent-green);
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.kpi-card.kpi-blue  { border-top-color: #3b82f6; }
+.kpi-card.kpi-amber { border-top-color: #f59e0b; }
+
+.kpi-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+}
+
+.kpi-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.kpi-icon {
+    font-size: 1.6rem;
+    margin-bottom: 0.25rem;
+}
+
+/* ── Tarjeta de vidrio (glass-card) ── */
+.glass-card {
+    background: var(--card-bg);
+    border-radius: 20px;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    overflow: hidden;
+    margin-bottom: 2rem;
+    animation: fadeIn 0.8s ease-out;
+}
+
+.glass-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 1.5rem;
+    background: #f9fafb;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.glass-card-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+/* ── Barra de filtros ── */
+.filter-bar {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background: #f9fafb;
+    border-bottom: 1px solid var(--border-color);
+    flex-wrap: wrap;
+}
+
+.filter-bar label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.filter-bar select,
+.filter-bar input {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.45rem 0.8rem;
+    font-size: 0.9rem;
+    background: #fff;
+    color: var(--text-main);
+    transition: border-color 0.2s;
+}
+
+.filter-bar select:focus,
+.filter-bar input:focus {
+    outline: none;
+    border-color: var(--accent-green);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.btn-filter {
+    background: linear-gradient(135deg, var(--accent-green), #34d399);
+    color: white;
+    border: none;
+    padding: 0.5rem 1.2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.25s;
+}
+
+.btn-filter:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.35);
+}
+
+.btn-reset {
+    background: #fff;
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-reset:hover {
+    border-color: var(--accent-green);
+    color: var(--accent-green);
+}
+
+/* ── Tabla principal ── */
+.custom-table {
+    margin: 0;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.custom-table thead th {
+    background-color: #f3f4f6;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.82rem;
+    letter-spacing: 0.05em;
+    padding: 1rem 1.4rem;
+    border-bottom: 2px solid var(--border-color);
+    white-space: nowrap;
+}
+
+.custom-table tbody td {
+    padding: 1rem 1.4rem;
+    vertical-align: middle;
+    color: var(--text-main);
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.95rem;
+    transition: background-color 0.15s;
+}
+
+.custom-table tbody tr:hover td {
+    background-color: #f9fafb;
+}
+
+.custom-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* ── Badges de estado ── */
+.estado-badge {
+    padding: 0.3rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    background-color: #ecfdf5;
+    color: #065f46;
+    display: inline-block;
+}
+
+/* ── Monto en verde ── */
+.monto {
+    font-weight: 700;
+    color: var(--accent-green);
+}
+
+/* ── Tabla de resúmenes en dos columnas ── */
+.resumen-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* ── Estado vacío ── */
+.empty-state {
+    padding: 4rem 2rem;
+    text-align: center;
+    color: var(--text-muted);
+}
+
+.empty-icon {
+    font-size: 3rem;
+    color: #d1d5db;
+    margin-bottom: 1rem;
+}
+
+/* ── Animaciones ── */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-15px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+    .kpi-grid        { grid-template-columns: 1fr 1fr; }
+    .resumen-grid    { grid-template-columns: 1fr; }
+    .ventas-header   { flex-direction: column; align-items: flex-start; gap: 1rem; }
+}
+
+@media (max-width: 600px) {
+    .kpi-grid        { grid-template-columns: 1fr; }
+    .ventas-container { padding: 0 1rem; }
+}

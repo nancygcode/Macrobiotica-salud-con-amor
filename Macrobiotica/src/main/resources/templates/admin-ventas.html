@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Ventas - Admin | Salud con Amor</title>
+
+    <!-- Google Fonts (Outfit, igual que facturas-provedor) -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- CSS propio -->
+    <link rel="stylesheet" th:href="@{/css/admin-ventas.css}">
+</head>
+<body>
+
+<main class="ventas-container">
+
+    <!-- ══ ENCABEZADO ══ -->
+    <div class="ventas-header">
+        <h2>
+            <i class="fas fa-chart-line me-2" style="color: var(--accent-green);"></i>
+            Panel de Ventas
+        </h2>
+        <a th:href="@{/}" class="btn btn-outline-secondary btn-sm">
+            <i class="fas fa-arrow-left me-1"></i> Volver al inicio
+        </a>
+    </div>
+
+    <!-- ══ KPIs ══ -->
+    <div class="kpi-grid">
+        <div class="kpi-card">
+            <div class="kpi-icon">💰</div>
+            <div class="kpi-label">Total Vendido</div>
+            <div class="kpi-value"
+                 th:text="'₡' + ${#numbers.formatDecimal(totalVentas, 1, 'COMMA', 2, 'POINT')}">
+                ₡0.00
+            </div>
+        </div>
+        <div class="kpi-card kpi-blue">
+            <div class="kpi-icon">🧾</div>
+            <div class="kpi-label">Facturas Emitidas</div>
+            <div class="kpi-value" th:text="${cantidadFacturas}">0</div>
+        </div>
+        <div class="kpi-card kpi-amber">
+            <div class="kpi-icon">📊</div>
+            <div class="kpi-label">Promedio por Venta</div>
+            <div class="kpi-value"
+                 th:text="'₡' + ${#numbers.formatDecimal(promedioVenta, 1, 'COMMA', 2, 'POINT')}">
+                ₡0.00
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ RESÚMENES: Vendedores y Productos ══ -->
+    <div class="resumen-grid">
+
+        <!-- Ventas por Vendedor -->
+        <div class="glass-card">
+            <div class="glass-card-header">
+                <h3><i class="fas fa-user-tie me-2 text-success"></i> Ventas por Vendedor</h3>
+            </div>
+            <div class="table-responsive">
+                <table class="table custom-table">
+                    <thead>
+                        <tr>
+                            <th>Cédula Vendedor</th>
+                            <th>N° Facturas</th>
+                            <th>Total Vendido</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="fila : ${ventasPorVendedor}">
+                            <td>
+                                <i class="fas fa-id-card text-muted me-1"></i>
+                                <span th:text="${fila[0]}">-</span>
+                            </td>
+                            <td th:text="${fila[1]}">0</td>
+                            <td>
+                                <span class="monto"
+                                      th:text="'₡' + ${#numbers.formatDecimal(fila[2], 1, 'COMMA', 2, 'POINT')}">
+                                    ₡0.00
+                                </span>
+                            </td>
+                        </tr>
+                        <tr th:if="${ventasPorVendedor.empty}">
+                            <td colspan="3">
+                                <div class="empty-state">
+                                    <div class="empty-icon"><i class="fas fa-box-open"></i></div>
+                                    <p>Sin datos de vendedores</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Productos Más Vendidos -->
+        <div class="glass-card">
+            <div class="glass-card-header">
+                <h3><i class="fas fa-boxes-stacked me-2 text-success"></i> Productos Más Vendidos</h3>
+            </div>
+            <div class="table-responsive">
+                <table class="table custom-table">
+                    <thead>
+                        <tr>
+                            <th>Código Producto</th>
+                            <th>Unidades Vendidas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="fila : ${productosMasVendidos}">
+                            <td>
+                                <i class="fas fa-tag text-muted me-1"></i>
+                                <span th:text="${fila[0]}">-</span>
+                            </td>
+                            <td>
+                                <span class="monto" th:text="${fila[1]}">0</span>
+                            </td>
+                        </tr>
+                        <tr th:if="${productosMasVendidos.empty}">
+                            <td colspan="2">
+                                <div class="empty-state">
+                                    <div class="empty-icon"><i class="fas fa-box-open"></i></div>
+                                    <p>Sin datos de productos</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ══ TABLA PRINCIPAL DE VENTAS ══ -->
+    <div class="glass-card">
+        <div class="glass-card-header">
+            <h3><i class="fas fa-file-invoice-dollar me-2 text-success"></i> Detalle de Ventas</h3>
+            <span class="badge bg-success" th:text="${ventas.size()} + ' registros'">0 registros</span>
+        </div>
+
+        <!-- Filtros rápidos -->
+        <div class="filter-bar">
+            <label>Filtrar por estado:</label>
+            <div th:each="estado : ${estados}">
+                <a th:href="@{/admin/ventas/estado/{id}(id=${estado.idEstado})}"
+                   class="btn-filter"
+                   th:text="${estado.estado}">
+                    Estado
+                </a>
+            </div>
+            <a th:href="@{/admin/ventas}" class="btn-reset">
+                <i class="fas fa-rotate-left me-1"></i> Ver todas
+            </a>
+        </div>
+
+        <!-- Tabla -->
+        <div class="table-responsive">
+            <table class="table custom-table">
+                <thead>
+                    <tr>
+                        <th># Factura</th>
+                        <th>Cliente (Cédula)</th>
+                        <th>Vendedor (Cédula)</th>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Subtotal</th>
+                        <th>IVA</th>
+                        <th>Total</th>
+                        <th>Pago Recibido</th>
+                        <th>Fecha</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="v : ${ventas}">
+                        <td>
+                            <span class="fw-bold" style="color:#4b5563;"
+                                  th:text="${v.numeroFactura}">-</span>
+                        </td>
+                        <td>
+                            <i class="fas fa-user text-muted me-1"></i>
+                            <span th:text="${v.cedulaCliente}">-</span>
+                        </td>
+                        <td>
+                            <i class="fas fa-user-tie text-muted me-1"></i>
+                            <span th:text="${v.cedulaVendedor}">-</span>
+                        </td>
+                        <td th:text="${v.codigoProducto}">-</td>
+                        <td th:text="${v.cantidadProducto}">0</td>
+                        <td>
+                            <span th:text="'₡' + ${#numbers.formatDecimal(v.subtotal, 1, 'COMMA', 2, 'POINT')}">₡0.00</span>
+                        </td>
+                        <td>
+                            <span th:text="'₡' + ${#numbers.formatDecimal(v.iva, 1, 'COMMA', 2, 'POINT')}">₡0.00</span>
+                        </td>
+                        <td>
+                            <span class="monto"
+                                  th:text="'₡' + ${#numbers.formatDecimal(v.total, 1, 'COMMA', 2, 'POINT')}">
+                                ₡0.00
+                            </span>
+                        </td>
+                        <td>
+                            <span th:text="'₡' + ${#numbers.formatDecimal(v.pagoRecibido, 1, 'COMMA', 2, 'POINT')}">₡0.00</span>
+                        </td>
+                        <td>
+                            <i class="far fa-calendar-alt text-muted me-1"></i>
+                            <span th:text="${v.fechaEmision != null ? #dates.format(v.fechaEmision, 'dd/MM/yyyy') : '-'}">-</span>
+                        </td>
+                        <td>
+                            <span class="estado-badge" th:text="${v.idEstado}">-</span>
+                        </td>
+                    </tr>
+
+                    <!-- Fila vacía -->
+                    <tr th:if="${ventas.empty}">
+                        <td colspan="11">
+                            <div class="empty-state">
+                                <div class="empty-icon"><i class="fas fa-box-open"></i></div>
+                                <h5>No hay ventas registradas</h5>
+                                <p>Cuando se registren facturas de clientes aparecerán aquí.</p>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</main>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+</body>
+</html>
