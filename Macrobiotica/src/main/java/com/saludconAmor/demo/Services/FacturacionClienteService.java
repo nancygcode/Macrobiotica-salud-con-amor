@@ -5,7 +5,6 @@ import com.saludconAmor.demo.Repository.FacturacionClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,36 +18,39 @@ public class FacturacionClienteService {
         return repository.findAll();
     }
 
+    public void guardar(FacturacionCliente factura) {
+        repository.save(factura);
+    }
+
     public Optional<FacturacionCliente> buscarPorId(Long id) {
         return repository.findById(id);
+    }
+
+    public void eliminar(Long id) {
+        repository.deleteById(id);
+    }
+
+    public java.math.BigDecimal obtenerTotalVentas() {
+        return repository.obtenerTotalVentas();
+    }
+
+    public long obtenerCantidadFacturas() {
+        return repository.obtenerCantidadFacturas();
+    }
+
+    public List<Object[]> obtenerVentasPorVendedor() {
+        return repository.obtenerVentasPorVendedor();
+    }
+
+    public List<Object[]> obtenerProductosMasVendidos() {
+        return repository.obtenerProductosMasVendidos();
     }
 
     public List<FacturacionCliente> buscarPorVendedor(Long cedula) {
         return repository.findByCedulaVendedor(cedula);
     }
 
-    public List<FacturacionCliente> buscarPorCliente(Long cedula) {
-        return repository.findByCedulaCliente(cedula);
-    }
-
     public List<FacturacionCliente> buscarPorEstado(Long idEstado) {
         return repository.findByIdEstado(idEstado);
-    }
-
-    public BigDecimal obtenerTotalVentas() {
-        BigDecimal total = repository.sumTotalVentas();
-        return total != null ? total : BigDecimal.ZERO;
-    }
-
-    public long obtenerCantidadFacturas() {
-        return repository.count();
-    }
-
-    public List<Object[]> obtenerVentasPorVendedor() {
-        return repository.ventasPorVendedor();
-    }
-
-    public List<Object[]> obtenerProductosMasVendidos() {
-        return repository.productosMasVendidos();
     }
 }

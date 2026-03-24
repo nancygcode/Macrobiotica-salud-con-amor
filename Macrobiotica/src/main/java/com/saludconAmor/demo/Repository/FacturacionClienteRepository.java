@@ -11,30 +11,19 @@ import java.util.List;
 @Repository
 public interface FacturacionClienteRepository extends JpaRepository<FacturacionCliente, Long> {
 
-    // Buscar por vendedor
+    @Query("SELECT COALESCE(SUM(f.total), 0) FROM FacturacionCliente f")
+    BigDecimal obtenerTotalVentas();
+
+    @Query("SELECT COUNT(f) FROM FacturacionCliente f")
+    long obtenerCantidadFacturas();
+
+    @Query("SELECT f.cedulaVendedor, SUM(f.total) FROM FacturacionCliente f GROUP BY f.cedulaVendedor ORDER BY SUM(f.total) DESC")
+    List<Object[]> obtenerVentasPorVendedor();
+
+    @Query("SELECT p.nombre, SUM(f.cantidadProducto) FROM FacturacionCliente f JOIN Producto p ON f.codigoProducto = p.codigoProducto GROUP BY p.nombre ORDER BY SUM(f.cantidadProducto) DESC")
+    List<Object[]> obtenerProductosMasVendidos();
+
     List<FacturacionCliente> findByCedulaVendedor(Long cedulaVendedor);
 
-    // Buscar por cliente
-    List<FacturacionCliente> findByCedulaCliente(Long cedulaCliente);
-
-    // Buscar por estado
     List<FacturacionCliente> findByIdEstado(Long idEstado);
-
-    // Total general de ventas
-    @Query("SELECT COALESCE(SUM(f.total), 0) FROM FacturacionCliente f")
-    BigDecimal sumTotalVentas();
-
-    // Ventas agrupadas por vendedor: cedula, cantidad de facturas, total vendido
-    @Query("SELECT f.cedulaVendedor, COUNT(f), SUM(f.total) " +
-           "FROM FacturacionCliente f " +
-           "GROUP BY f.cedulaVendedor " +
-           "ORDER BY SUM(f.total) DESC")
-    List<Object[]> ventasPorVendedor();
-
-    // Productos más vendidos: codigo, cantidad total vendida
-    @Query("SELECT f.codigoProducto, SUM(f.cantidadProducto) " +
-           "FROM FacturacionCliente f " +
-           "GROUP BY f.codigoProducto " +
-           "ORDER BY SUM(f.cantidadProducto) DESC")
-    List<Object[]> productosMasVendidos();
 }
