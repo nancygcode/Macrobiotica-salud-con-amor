@@ -5,236 +5,392 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Ventas - Admin | Salud con Amor</title>
 
-    <!-- Google Fonts (Outfit, igual que facturas-provedor) -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- CSS propio -->
-    <link rel="stylesheet" th:href="@{/css/admin-ventas.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #0f172a;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --bg: #f8fafc;
+            --glass: rgba(255, 255, 255, 0.95);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg);
+            color: var(--primary);
+            overflow-x: hidden;
+        }
+
+        /* Standalone Sidebar */
+        .sidebar {
+            width: 260px;
+            height: 100vh;
+            background: var(--primary);
+            position: fixed;
+            left: 0;
+            top: 0;
+            padding: 2rem 1.5rem;
+            color: white;
+            z-index: 1000;
+        }
+
+        .sidebar-brand {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .nav-link-custom {
+            color: rgba(255,255,255,0.6);
+            padding: 0.8rem 1rem;
+            border-radius: 12px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: var(--transition);
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-link-custom:hover, .nav-link-custom.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 260px;
+            padding: 2.5rem;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            border: 1px solid rgba(0,0,0,0.02);
+        }
+
+        .stat-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        /* Summary Sections */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .data-card {
+            background: white;
+            border-radius: 24px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
+        }
+
+        .card-title {
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* Custom Table */
+        .table-custom {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 0.8rem;
+        }
+
+        .table-custom th {
+            padding: 1rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #64748b;
+            letter-spacing: 1px;
+        }
+
+        .table-custom tr td {
+            background: white;
+            padding: 1.2rem 1rem;
+            font-size: 0.9rem;
+            border-top: 1px solid #f1f5f9;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .table-custom tr td:first-child {
+            border-left: 1px solid #f1f5f9;
+            border-radius: 16px 0 0 16px;
+        }
+
+        .table-custom tr td:last-child {
+            border-right: 1px solid #f1f5f9;
+            border-radius: 0 16px 16px 0;
+        }
+
+        .amount-badge {
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .status-pill {
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .filter-ribbon {
+            background: white;
+            padding: 1rem;
+            border-radius: 16px;
+            display: flex;
+            gap: 0.8rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1.2rem;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            background: white;
+            white-space: nowrap;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: var(--transition);
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        @media (max-width: 1024px) {
+            .sidebar { display: none; }
+            .main-content { margin-left: 0; }
+        }
+    </style>
 </head>
 <body>
 
-<main class="ventas-container">
-
-    <!-- ══ ENCABEZADO ══ -->
-    <div class="ventas-header">
-        <h2>
-            <i class="fas fa-chart-line me-2" style="color: var(--accent-green);"></i>
-            Panel de Ventas
-        </h2>
-        <a th:href="@{/}" class="btn btn-outline-secondary btn-sm">
-            <i class="fas fa-arrow-left me-1"></i> Volver al inicio
-        </a>
-    </div>
-
-    <!-- ══ KPIs ══ -->
-    <div class="kpi-grid">
-        <div class="kpi-card">
-            <div class="kpi-icon">💰</div>
-            <div class="kpi-label">Total Vendido</div>
-            <div class="kpi-value"
-                 th:text="'₡' + ${#numbers.formatDecimal(totalVentas, 1, 'COMMA', 2, 'POINT')}">
-                ₡0.00
-            </div>
+    <!-- STANDALONE SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <i class="fas fa-leaf text-success"></i>
+            <span>Salud con Amor</span>
         </div>
-        <div class="kpi-card kpi-blue">
-            <div class="kpi-icon">🧾</div>
-            <div class="kpi-label">Facturas Emitidas</div>
-            <div class="kpi-value" th:text="${cantidadFacturas}">0</div>
-        </div>
-        <div class="kpi-card kpi-amber">
-            <div class="kpi-icon">📊</div>
-            <div class="kpi-label">Promedio por Venta</div>
-            <div class="kpi-value"
-                 th:text="'₡' + ${#numbers.formatDecimal(promedioVenta, 1, 'COMMA', 2, 'POINT')}">
-                ₡0.00
-            </div>
-        </div>
-    </div>
-
-    <!-- ══ RESÚMENES: Vendedores y Productos ══ -->
-    <div class="resumen-grid">
-
-        <!-- Ventas por Vendedor -->
-        <div class="glass-card">
-            <div class="glass-card-header">
-                <h3><i class="fas fa-user-tie me-2 text-success"></i> Ventas por Vendedor</h3>
-            </div>
-            <div class="table-responsive">
-                <table class="table custom-table">
-                    <thead>
-                        <tr>
-                            <th>Cédula Vendedor</th>
-                            <th>N° Facturas</th>
-                            <th>Total Vendido</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="fila : ${ventasPorVendedor}">
-                            <td>
-                                <i class="fas fa-id-card text-muted me-1"></i>
-                                <span th:text="${fila[0]}">-</span>
-                            </td>
-                            <td th:text="${fila[1]}">0</td>
-                            <td>
-                                <span class="monto"
-                                      th:text="'₡' + ${#numbers.formatDecimal(fila[2], 1, 'COMMA', 2, 'POINT')}">
-                                    ₡0.00
-                                </span>
-                            </td>
-                        </tr>
-                        <tr th:if="${ventasPorVendedor.empty}">
-                            <td colspan="3">
-                                <div class="empty-state">
-                                    <div class="empty-icon"><i class="fas fa-box-open"></i></div>
-                                    <p>Sin datos de vendedores</p>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Productos Más Vendidos -->
-        <div class="glass-card">
-            <div class="glass-card-header">
-                <h3><i class="fas fa-boxes-stacked me-2 text-success"></i> Productos Más Vendidos</h3>
-            </div>
-            <div class="table-responsive">
-                <table class="table custom-table">
-                    <thead>
-                        <tr>
-                            <th>Código Producto</th>
-                            <th>Unidades Vendidas</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="fila : ${productosMasVendidos}">
-                            <td>
-                                <i class="fas fa-tag text-muted me-1"></i>
-                                <span th:text="${fila[0]}">-</span>
-                            </td>
-                            <td>
-                                <span class="monto" th:text="${fila[1]}">0</span>
-                            </td>
-                        </tr>
-                        <tr th:if="${productosMasVendidos.empty}">
-                            <td colspan="2">
-                                <div class="empty-state">
-                                    <div class="empty-icon"><i class="fas fa-box-open"></i></div>
-                                    <p>Sin datos de productos</p>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- ══ TABLA PRINCIPAL DE VENTAS ══ -->
-    <div class="glass-card">
-        <div class="glass-card-header">
-            <h3><i class="fas fa-file-invoice-dollar me-2 text-success"></i> Detalle de Ventas</h3>
-            <span class="badge bg-success" th:text="${ventas.size()} + ' registros'">0 registros</span>
-        </div>
-
-        <!-- Filtros rápidos -->
-        <div class="filter-bar">
-            <label>Filtrar por estado:</label>
-            <div th:each="estado : ${estados}">
-                <a th:href="@{/admin/ventas/estado/{id}(id=${estado.idEstado})}"
-                   class="btn-filter"
-                   th:text="${estado.estado}">
-                    Estado
-                </a>
-            </div>
-            <a th:href="@{/admin/ventas}" class="btn-reset">
-                <i class="fas fa-rotate-left me-1"></i> Ver todas
+        <nav>
+            <a href="/" class="nav-link-custom">
+                <i class="fas fa-th-large"></i> Home Hub
             </a>
+            <a href="/admin/ventas" class="nav-link-custom active">
+                <i class="fas fa-chart-pie"></i> Panel de Ventas
+            </a>
+            <a href="/producto/inventario" class="nav-link-custom">
+                <i class="fas fa-boxes-stacked"></i> Inventario
+            </a>
+            <a href="/facturas-cliente" class="nav-link-custom">
+                <i class="fas fa-file-invoice-dollar"></i> Facturación
+            </a>
+            <a href="/admin/rrhh" class="nav-link-custom">
+                <i class="fas fa-users-gear"></i> Recursos Humanos
+            </a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <!-- HEADER -->
+        <div class="page-header">
+            <div>
+                <h1 class="fw-800 m-0">Reporte de Ventas</h1>
+                <p class="text-muted">Análisis detallado de transacciones y rendimiento comercial.</p>
+            </div>
+            <div th:if="${filtroActivo}" class="alert alert-info py-2 px-4 m-0 rounded-pill">
+                <i class="fas fa-filter me-2"></i> <span th:text="${filtroActivo}">Filtro Activo</span>
+            </div>
         </div>
 
-        <!-- Tabla -->
-        <div class="table-responsive">
-            <table class="table custom-table">
-                <thead>
-                    <tr>
-                        <th># Factura</th>
-                        <th>Cliente (Cédula)</th>
-                        <th>Vendedor (Cédula)</th>
-                        <th>Producto</th>
-                        <th>Cantidad</th>
-                        <th>Subtotal</th>
-                        <th>IVA</th>
-                        <th>Total</th>
-                        <th>Pago Recibido</th>
-                        <th>Fecha</th>
-                        <th>Estado</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="v : ${ventas}">
-                        <td>
-                            <span class="fw-bold" style="color:#4b5563;"
-                                  th:text="${v.numeroFactura}">-</span>
-                        </td>
-                        <td>
-                            <i class="fas fa-user text-muted me-1"></i>
-                            <span th:text="${v.cedulaCliente}">-</span>
-                        </td>
-                        <td>
-                            <i class="fas fa-user-tie text-muted me-1"></i>
-                            <span th:text="${v.cedulaVendedor}">-</span>
-                        </td>
-                        <td th:text="${v.codigoProducto}">-</td>
-                        <td th:text="${v.cantidadProducto}">0</td>
-                        <td>
-                            <span th:text="'₡' + ${#numbers.formatDecimal(v.subtotal, 1, 'COMMA', 2, 'POINT')}">₡0.00</span>
-                        </td>
-                        <td>
-                            <span th:text="'₡' + ${#numbers.formatDecimal(v.iva, 1, 'COMMA', 2, 'POINT')}">₡0.00</span>
-                        </td>
-                        <td>
-                            <span class="monto"
-                                  th:text="'₡' + ${#numbers.formatDecimal(v.total, 1, 'COMMA', 2, 'POINT')}">
-                                ₡0.00
-                            </span>
-                        </td>
-                        <td>
-                            <span th:text="'₡' + ${#numbers.formatDecimal(v.pagoRecibido, 1, 'COMMA', 2, 'POINT')}">₡0.00</span>
-                        </td>
-                        <td>
-                            <i class="far fa-calendar-alt text-muted me-1"></i>
-                            <span th:text="${v.fechaEmision != null ? #dates.format(v.fechaEmision, 'dd/MM/yyyy') : '-'}">-</span>
-                        </td>
-                        <td>
-                            <span class="estado-badge" th:text="${v.idEstado}">-</span>
-                        </td>
-                    </tr>
-
-                    <!-- Fila vacía -->
-                    <tr th:if="${ventas.empty}">
-                        <td colspan="11">
-                            <div class="empty-state">
-                                <div class="empty-icon"><i class="fas fa-box-open"></i></div>
-                                <h5>No hay ventas registradas</h5>
-                                <p>Cuando se registren facturas de clientes aparecerán aquí.</p>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <!-- KPI GRID -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon" style="background: #ecfdf5; color: #059669;">
+                    <i class="fas fa-coins"></i>
+                </div>
+                <div>
+                    <div class="small fw-600 text-muted">Ingresos Totales</div>
+                    <div class="h4 fw-800 m-0" th:text="'₡' + ${#numbers.formatDecimal(totalVentas, 1, 'COMMA', 2, 'POINT')}">₡0.00</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: #eff6ff; color: #2563eb;">
+                    <i class="fas fa-receipt"></i>
+                </div>
+                <div>
+                    <div class="small fw-600 text-muted">Facturas Totales</div>
+                    <div class="h4 fw-800 m-0" th:text="${cantidadFacturas}">0</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: #fff7ed; color: #ea580c;">
+                    <i class="fas fa-chart-simple"></i>
+                </div>
+                <div>
+                    <div class="small fw-600 text-muted">Ticket Promedio</div>
+                    <div class="h4 fw-800 m-0" th:text="'₡' + ${#numbers.formatDecimal(promedioVenta, 1, 'COMMA', 2, 'POINT')}">₡0.00</div>
+                </div>
+            </div>
         </div>
-    </div>
 
-</main>
+        <!-- SUMMARY ROW -->
+        <div class="summary-grid">
+            <!-- Vendedores -->
+            <div class="data-card">
+                <div class="card-title">
+                    <i class="fas fa-medal text-warning"></i> Top Vendedores
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="border-0">Vendedor</th>
+                                <th class="border-0 text-center">Facturas</th>
+                                <th class="border-0 text-end">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="fila : ${ventasPorVendedor}">
+                                <td class="fw-600" th:text="${fila[0]}">#4582</td>
+                                <td class="text-center"><span class="badge bg-light text-dark rounded-pill" th:text="${fila[1]}">0</span></td>
+                                <td class="text-end fw-800" th:text="'₡' + ${#numbers.formatDecimal(fila[2], 1, 'COMMA', 2, 'POINT')}">₡0.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-<!-- Scripts -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+            <!-- Productos -->
+            <div class="data-card">
+                <div class="card-title">
+                    <i class="fas fa-fire text-danger"></i> Productos Estrella
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="border-0">Producto</th>
+                                <th class="border-0 text-end">Unidades</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="fila : ${productosMasVendidos}">
+                                <td class="fw-600" th:text="${fila[0]}">Nombre Producto</td>
+                                <td class="text-end fw-800 text-success" th:text="${fila[1]}">0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
 
+        <!-- MAIN TABLE -->
+        <div class="filter-ribbon">
+            <a th:href="@{/admin/ventas}" class="filter-btn active">Todos</a>
+            <div th:each="estado : ${estados}" class="d-inline">
+                <a th:href="@{/admin/ventas/estado/{id}(id=${estado.idEstado})}" 
+                   class="filter-btn" 
+                   th:text="${estado.estado}">Activo</a>
+            </div>
+        </div>
+
+        <div class="data-card border-0">
+            <div class="table-responsive">
+                <table class="table-custom">
+                    <thead>
+                        <tr>
+                            <th>Factura</th>
+                            <th>Cliente</th>
+                            <th>Producto</th>
+                            <th>Cant.</th>
+                            <th>Subtotal</th>
+                            <th>IVA</th>
+                            <th>Total</th>
+                            <th>Fecha</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="v : ${ventas}">
+                            <td><span class="fw-800" th:text="'#' + ${v.numeroFactura}">#001</span></td>
+                            <td class="text-muted" th:text="${v.cedulaCliente}">Cedula</td>
+                            <td class="fw-600" th:text="${v.codigoProducto}">Cod</td>
+                            <td th:text="${v.cantidadProducto}">1</td>
+                            <td th:text="'₡' + ${v.subtotal}">₡0</td>
+                            <td class="text-muted" th:text="'₡' + ${v.iva}">₡0</td>
+                            <td class="amount-badge" th:text="'₡' + ${#numbers.formatDecimal(v.total, 1, 'COMMA', 2, 'POINT')}">₡0.00</td>
+                            <td class="text-muted" th:text="${v.fechaEmision != null ? #dates.format(v.fechaEmision, 'dd/MM/yyyy') : '-'}">01/01/2025</td>
+                            <td>
+                                <span class="status-pill" 
+                                      th:classappend="${v.idEstado == 1 ? 'bg-success-subtle text-success' : 'bg-warning-subtle text-warning'}"
+                                      th:style="${v.idEstado == 1 ? 'background: #d1fae5; color: #065f46;' : 'background: #fef3c7; color: #92400e;'}"
+                                      th:text="${v.idEstado == 1 ? 'PAGADO' : 'PENDIENTE'}">PENDIENTE</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div th:if="${#lists.isEmpty(ventas)}" class="text-center py-5">
+                <i class="fas fa-ghost fa-3x text-muted mb-3"></i>
+                <p class="text-muted">No se encontraron ventas con los criterios seleccionados.</p>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

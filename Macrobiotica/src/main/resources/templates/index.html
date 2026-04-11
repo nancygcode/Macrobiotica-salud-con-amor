@@ -1,186 +1,288 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hub Central | Salud con Amor</title>
+    
+    <!-- Google Fonts: Outfit & Playfair -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome 6 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap 5.3 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #1a4d2e;
+            --secondary: #4f6f52;
+            --accent: #f5bd02;
+            --dark: #051a0c;
+            --light: #f4f9f5;
+            --glass: rgba(255, 255, 255, 0.9);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
 
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <title th:text="#{page.home.title}">Salud con Amor - Inicio</title>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #f4f9f5 0%, #e8efea 100%);
+            min-height: 100vh;
+            color: var(--dark);
+            overflow-x: hidden;
+        }
 
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link
-            href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-            rel="stylesheet">
-        <link rel="icon" type="image/x-icon" th:href="@{/images/image.png}">
+        /* Abstract Background Elements */
+        .bg-blob {
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(26, 77, 46, 0.05) 0%, rgba(26, 77, 46, 0) 70%);
+            border-radius: 50%;
+            z-index: -1;
+            filter: blur(40px);
+        }
 
-        <!-- Use Thymeleaf resource URL syntax; static files live in /static -->
-        <link rel="stylesheet" th:href="@{/css/styles.css}" />
-        <link rel="stylesheet" th:href="@{/css/cart.css}" />
-    </head>
+        /* Header */
+        .header-section {
+            padding: 4rem 0;
+            text-align: center;
+        }
 
-    <body>
+        .header-section h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+        }
+
+        .header-section p {
+            font-size: 1.2rem;
+            color: var(--secondary);
+            font-weight: 400;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Grid System */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding-bottom: 5rem;
+        }
+
+        /* Hub Card */
+        .hub-card {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.4);
+            border-radius: 30px;
+            padding: 2.5rem;
+            text-decoration: none;
+            color: inherit;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+        }
+
+        .hub-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            background: var(--white);
+            box-shadow: 0 30px 60px rgba(26, 77, 46, 0.1);
+            border-color: var(--primary);
+        }
+
+        .icon-box {
+            width: 80px;
+            height: 80px;
+            background: var(--primary);
+            color: white;
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            transition: var(--transition);
+            box-shadow: 0 10px 20px rgba(26, 77, 46, 0.2);
+        }
+
+        .hub-card:hover .icon-box {
+            transform: rotate(10deg);
+            background: var(--accent);
+            color: var(--dark);
+        }
+
+        .hub-card h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            color: var(--dark);
+        }
+
+        .hub-card p {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #64748b;
+            margin: 0;
+        }
+
+        /* Decorative Badge */
+        .card-badge {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 0.4rem 0.8rem;
+            border-radius: 10px;
+            background: #e1e9e2;
+            color: var(--primary);
+        }
+
+        /* Footer Bar */
+        .footer-bar {
+            background: var(--primary);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            border-radius: 40px 40px 0 0;
+            margin-top: auto;
+        }
+
+        .cta-logout {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+            transition: var(--transition);
+        }
+
+        .cta-logout:hover {
+            color: white;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        @media (max-width: 768px) {
+            .header-section h1 { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-blob" style="top: -100px; left: -100px;"></div>
+    <div class="bg-blob" style="bottom: -100px; right: -100px; background: radial-gradient(circle, rgba(245, 189, 2, 0.03) 0%, rgba(245, 189, 2, 0) 70%);"></div>
+
+    <div class="container d-flex flex-column min-vh-100">
         <!-- HEADER -->
-        <div th:replace="~{fragments/_header :: header}"></div>        <!-- HERO -->
-        <section class="hero">
-            <div class="hero-inner">
-                <div class="hero-copy">
-                    <h1 th:text="#{hero.title}">Invierte en tu salud de manera valiosa: tu cuerpo merece lo natural</h1>
-                    <p class="hero-sub" th:text="#{hero.subtitle}">Consigue productos de alta calidad con ingredientes naturales y el mejor precio.</p>
-                    <div class="hero-cta">
-                        <a class="btn btn-primary" href="/productos" th:text="#{hero.cta}">Empezar a comprar</a>
-                    </div>
+        <header class="header-section animate-in">
+            <h1>Salud con Amor</h1>
+            <p>Panel Central de Operaciones. Selecciona un módulo para comenzar a gestionar tu bienestar natural.</p>
+        </header>
 
-                    <div class="hero-highlights">
-                        <div class="highlight" th:text="#{hero.discount}">Hasta 25% de descuento</div>
-                        <div class="highlight" th:text="#{hero.shipping}">Envíos a todo el país</div>
-                        <div class="highlight" th:text="#{hero.consultation}">Consulta a un profesional</div>
-                        <div class="highlight" th:text="#{hero.tips}">Consejos de Salud</div>
-                    </div>
+        <!-- MENU GRID -->
+        <div class="menu-grid">
+            
+            <!-- PRODUCT CATALOG -->
+            <a href="/producto/listado" class="hub-card animate-in" style="animation-delay: 0.1s;">
+                <span class="card-badge">PÚBLICO</span>
+                <div class="icon-box">
+                    <i class="fas fa-shopping-bag"></i>
                 </div>
+                <h2>Catálogo</h2>
+                <p>Explora nuestra selección completa de productos naturales y orgánicos.</p>
+            </a>
 
-                <div class="hero-visual">
-                    <img th:src="@{/images/42dd9669a5a88b38f5ff170d1f3eb97e6ea4fc2a.png}" alt="Doctor" />
+            <!-- INVENTORY -->
+            <a href="/producto/inventario" class="hub-card animate-in" style="animation-delay: 0.2s;">
+                <span class="card-badge" style="background: #fdf2f2; color: #991b1b;">ADMIN</span>
+                <div class="icon-box">
+                    <i class="fas fa-boxes-stacked"></i>
                 </div>
+                <h2>Inventario</h2>
+                <p>Gestión de stock, códigos de producto y estados de disponibilidad.</p>
+            </a>
+
+            <!-- PROVEEDORES -->
+            <a href="/provedores" class="hub-card animate-in" style="animation-delay: 0.3s;">
+                <span class="card-badge" style="background: #fdf2f2; color: #991b1b;">ADMIN</span>
+                <div class="icon-box">
+                    <i class="fas fa-truck-field"></i>
+                </div>
+                <h2>Proveedores</h2>
+                <p>Directorio centralizado de suministradores y contactos comerciales.</p>
+            </a>
+
+            <!-- FACTURAS CLIENTE -->
+            <a href="/facturas-cliente" class="hub-card animate-in" style="animation-delay: 0.4s;">
+                <div class="icon-box">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                </div>
+                <h2>Ventas Clientes</h2>
+                <p>Registro y consulta de facturación emitida a clientes finales.</p>
+            </a>
+
+            <!-- FACTURAS PROVEEDOR -->
+            <a href="/facturas-proveedor" class="hub-card animate-in" style="animation-delay: 0.5s;">
+                <div class="icon-box">
+                    <i class="fas fa-receipt"></i>
+                </div>
+                <h2>Compras Proveedor</h2>
+                <p>Control de facturas recibidas y órdenes de compra corporativas.</p>
+            </a>
+
+            <!-- VENTAS PANEL -->
+            <a href="/admin/ventas" class="hub-card animate-in" style="animation-delay: 0.6s;">
+                <span class="card-badge" style="background: #fdf2f2; color: #991b1b;">ADMIN</span>
+                <div class="icon-box">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h2>Panel Ventas</h2>
+                <p>Análisis de métricas, promedios y productos más vendidos.</p>
+            </a>
+
+            <!-- RRHH -->
+            <a href="/admin/rrhh" class="hub-card animate-in" style="animation-delay: 0.7s;">
+                <span class="card-badge" style="background: #fdf2f2; color: #991b1b;">ADMIN</span>
+                <div class="icon-box">
+                    <i class="fas fa-users-gear"></i>
+                </div>
+                <h2>Recursos Humanos</h2>
+                <p>Control de asistencia, nómina y gestión de empleados.</p>
+            </a>
+
+        </div>
+
+        <!-- FOOTER BAR -->
+        <footer class="footer-bar animate-in" style="animation-delay: 0.8s;">
+            <div class="container">
+                <p class="mb-2">© 2025 Salud con Amor Macrobiótica - Conectando con lo esencial.</p>
+                <form th:action="@{/logout}" method="post" class="d-inline">
+                    <button type="submit" class="border-0 bg-transparent cta-logout">Cerrar Sesión Segura</button>
+                </form>
             </div>
-        </section>
+        </footer>
+    </div>
 
-        <!-- PRODUCTOS POPULARES -->
-        <main class="container">
-            <section class="section products-section">
-                <div class="section-header">
-                    <h2 th:text="#{section.popular}">Productos populares</h2>
-                    <a class="cta-link" href="/productos/populares" th:text="#{section.viewAll} + ' →'">Ver todos →</a>
-                </div>
-                <div class="products-grid" th:if="${popularProducts}">
-                    <article class="product-card" th:each="p : ${popularProducts}">
-                        <a th:href="@{/producto/{id}(id=${p.id})}" class="product-link">
-                            <img th:src="@{/images/{file}(file=${p.imageUrl})}" th:alt="${p.name}" />
-                            <h3 th:text="${p.name}">Nombre</h3>
-                            <p class="price" th:text="${p.price}">₡0.00</p>
-                        </a>
-                        <form th:action="@{/cart/add}" method="post" class="add-to-cart-form">
-                            <input type="hidden" name="productId" th:value="${p.id}">
-                            <input type="hidden" name="quantity" value="1">
-                            <button type="submit" class="add">
-                                🛒 <span th:text="#{button.addToCart.text}">Añadir al carrito</span>
-                            </button>
-                        </form>
-                    </article>
-                </div>
-            </section>
-
-            <section class="section products-section">
-                <div class="section-header">
-                    <h2 th:text="#{section.new}">Productos nuevos</h2>
-                    <a class="cta-link" href="/productos/nuevos" th:text="#{section.viewAll} + ' →'">Ver todos →</a>
-                </div>
-
-                <div class="products-grid" th:if="${newProducts}">
-                    <article class="product-card" th:each="p : ${newProducts}">
-                        <a th:href="@{/producto/{id}(id=${p.id})}" class="product-link">
-                            <img th:src="@{/images/{file}(file=${p.imageUrl})}" th:alt="${p.name}" />
-                            <h3 th:text="${p.name}">Nombre</h3>
-                            <p class="price" th:text="${p.price}">₡0.00</p>
-                        </a>
-                    <form th:action="@{/cart/add}" method="post" class="add-to-cart-form">
-                        <input type="hidden" name="productId" th:value="${p.id}">
-                        <input type="hidden" name="quantity" value="1">
-                        <button type="submit" class="add">
-                            🛒 <span th:text="#{button.addToCart.text}">Añadir al carrito</span>
-                        </button>
-                    </form>
-                    </article>
-                </div>
-            </section>
-
-            <!-- SECCION PROMOCIONAL GRANDE -->
-            <section class="promo-large">
-                <div class="promo-inner">
-                    <div class="promo-left">
-                        <span class="badge">Hasta 50% de descuento</span>
-                        <h3>Oferta del día: medicina natural</h3>
-                        <p>Encuentra lo mejor en suplementos naturales seleccionados para ti.</p>
-                        <a class="btn btn-secondary" href="/productos/populares" th:text="#{order.continueShopping}">Compra ahora</a>
-                    </div>
-                    <div class="promo-right">
-                        <img th:src="@{/images/promo.jpg}" alt="Promoción" />
-                    </div>
-                </div>
-            </section>
-
-
-            <section class="section products-section">
-                <div class="section-header">
-                    <h2 th:text="#{section.suplementos}">Suplementos</h2>
-                    <a class="cta-link" href="/productos/suplementos" th:text="#{section.viewAll} + ' →'">Ver todos →</a>
-                </div>
-
-                <div class="products-grid" th:if="${suplementos}">
-                    <article class="product-card" th:each="p : ${suplementos}">
-                        <a th:href="@{/producto/{id}(id=${p.id})}" class="product-link">
-                            <img th:src="@{/images/{file}(file=${p.imageUrl})}" th:alt="${p.name}" />
-                            <h3 th:text="${p.name}">Nombre</h3>
-                            <p class="price" th:text="${p.price}">₡0.00</p>
-                        </a>
-                    <form th:action="@{/cart/add}" method="post" class="add-to-cart-form">
-                        <input type="hidden" name="productId" th:value="${p.id}">
-                        <input type="hidden" name="quantity" value="1">
-                        <button type="submit" class="add">
-                            🛒 <span th:text="#{button.addToCart.text}">Añadir al carrito</span>
-                        </button>
-                    </form>
-                    </article>
-                </div>
-            </section>
-
-            <section class="section products-section">
-                <div class="section-header">
-                    <h2 th:text="#{section.vitaminas}">Vitaminas</h2>
-                    <a class="cta-link" href="/productos/vitaminas" th:text="#{section.viewAll} + ' →'">Ver todos →</a>
-                </div>
-
-                <div class="products-grid" th:if="${vitaminas}">
-                    <article class="product-card" th:each="p : ${vitaminas}">
-                        <a th:href="@{/producto/{id}(id=${p.id})}" class="product-link">
-                            <img th:src="@{/images/{file}(file=${p.imageUrl})}" th:alt="${p.name}" />
-                            <h3 th:text="${p.name}">Nombre</h3> 
-                            <p class="price" th:text="${p.price}">₡0.00</p>
-                        </a>
-                        <form th:action="@{/cart/add}" method="post" class="add-to-cart-form">
-                            <input type="hidden" name="productId" th:value="${p.id}">
-                            <input type="hidden" name="quantity" value="1">
-                            <button type="submit" class="add">
-                                🛒 <span th:text="#{button.addToCart.text}">Añadir al carrito</span>
-                            </button>
-                        </form>
-                    </article>
-                </div>
-            </section>
-            <!-- BLOG / INFORMACIÓN -->
-            <section class="section blog-section">
-                <div class="section-header">
-                    <h2 th:text="#{section.blog}">Blogs e información</h2>
-                </div>
-
-                <div class="blog-grid" th:if="${recentBlogs != null and !recentBlogs.isEmpty()}">
-                    <article class="blog-card" th:each="blog : ${recentBlogs}">
-                        <img th:src="@{/images/{file}(file=${blog.imageUrl})}" th:alt="${blog.title}" />
-                        <div class="blog-info">
-                            <h4 th:text="${blog.title}">Título del blog</h4>
-                            <p th:text="${blog.summary}">Resumen del blog...</p>
-                            <a th:href="@{/blog/{id}(id=${blog.id})}" class="read-more" th:text="#{blog.readMore}">Leer más →</a>
-                        </div>
-                    </article>
-                </div>
-                
-                <!-- Mensaje si no hay blogs -->
-                <div th:if="${recentBlogs == null or recentBlogs.isEmpty()}" class="no-blogs-message">
-                    <p th:text="#{blog.noBlogsHome}">No hay blogs disponibles actualmente.</p>
-                </div>
-            </section>
-        </main>
-
-        <!-- FOOTER -->
-        <div th:replace="~{fragments/_footer :: footer}"></div>
-    </body>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>

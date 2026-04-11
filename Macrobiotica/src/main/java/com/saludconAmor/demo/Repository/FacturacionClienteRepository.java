@@ -17,7 +17,7 @@ public interface FacturacionClienteRepository extends JpaRepository<FacturacionC
     @Query("SELECT COUNT(f) FROM FacturacionCliente f")
     long obtenerCantidadFacturas();
 
-    @Query("SELECT f.cedulaVendedor, SUM(f.total) FROM FacturacionCliente f GROUP BY f.cedulaVendedor ORDER BY SUM(f.total) DESC")
+    @Query("SELECT f.cedulaVendedor, COUNT(f), SUM(f.total) FROM FacturacionCliente f GROUP BY f.cedulaVendedor ORDER BY SUM(f.total) DESC")
     List<Object[]> obtenerVentasPorVendedor();
 
     @Query("SELECT p.nombre, SUM(f.cantidadProducto) FROM FacturacionCliente f JOIN Producto p ON f.codigoProducto = p.codigoProducto GROUP BY p.nombre ORDER BY SUM(f.cantidadProducto) DESC")
