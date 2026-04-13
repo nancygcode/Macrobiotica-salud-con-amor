@@ -1,298 +1,248 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hub Central | Salud con Amor</title>
-    
-    <!-- Google Fonts: Outfit & Playfair -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome 6 -->
+    <title>Macrobiótica | Hub</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
-    
-    <!-- Bootstrap 5.3 -->
+
+    <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
+    <!-- Global CSS -->
+    <link rel="stylesheet" th:href="@{/css/macrobiotica.css}">
+
     <style>
-        :root {
-            --primary: #1a4d2e;
-            --secondary: #4f6f52;
-            --accent: #f5bd02;
-            --dark: #051a0c;
-            --light: #f4f9f5;
-            --glass: rgba(255, 255, 255, 0.9);
-            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
         body {
-            font-family: 'Outfit', sans-serif;
-            background: linear-gradient(135deg, #f4f9f5 0%, #e8efea 100%);
+            background-color: #ffffff;
+            color: #1a4d2e;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             min-height: 100vh;
-            color: var(--dark);
-            overflow-x: hidden;
-        }
-
-        /* Abstract Background Elements */
-        .bg-blob {
-            position: fixed;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(26, 77, 46, 0.05) 0%, rgba(26, 77, 46, 0) 70%);
-            border-radius: 50%;
-            z-index: -1;
-            filter: blur(40px);
-        }
-
-        /* Header */
-        .header-section {
-            padding: 4rem 0;
-            text-align: center;
-        }
-
-        .header-section h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 3.5rem;
-            font-weight: 900;
-            color: var(--primary);
-            margin-bottom: 1rem;
-            letter-spacing: -1px;
-        }
-
-        .header-section p {
-            font-size: 1.2rem;
-            color: var(--secondary);
-            font-weight: 400;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        /* Grid System */
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            padding-bottom: 5rem;
-        }
-
-        /* Hub Card */
-        .hub-card {
-            background: var(--glass);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255,255,255,0.4);
-            border-radius: 30px;
-            padding: 2.5rem;
-            text-decoration: none;
-            color: inherit;
-            transition: var(--transition);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
-        }
-
-        .hub-card:hover {
-            transform: translateY(-12px) scale(1.02);
-            background: var(--white);
-            box-shadow: 0 30px 60px rgba(26, 77, 46, 0.1);
-            border-color: var(--primary);
-        }
-
-        .icon-box {
-            width: 80px;
-            height: 80px;
-            background: var(--primary);
-            color: white;
-            border-radius: 22px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
-            transition: var(--transition);
-            box-shadow: 0 10px 20px rgba(26, 77, 46, 0.2);
+            padding: 3rem 1rem;
         }
 
-        .hub-card:hover .icon-box {
-            transform: rotate(10deg);
-            background: var(--accent);
-            color: var(--dark);
-        }
-
-        .hub-card h2 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 0.8rem;
-            color: var(--dark);
-        }
-
-        .hub-card p {
-            font-size: 0.95rem;
-            line-height: 1.5;
-            color: #64748b;
-            margin: 0;
-        }
-
-        /* Decorative Badge */
-        .card-badge {
-            position: absolute;
-            top: 1.5rem;
-            right: 1.5rem;
-            font-size: 0.7rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            padding: 0.4rem 0.8rem;
-            border-radius: 10px;
-            background: #e1e9e2;
-            color: var(--primary);
-        }
-
-        /* Footer Bar */
-        .footer-bar {
-            background: var(--primary);
-            color: white;
-            padding: 2rem 0;
+        .minimal-hub {
+            max-width: 900px;
+            width: 100%;
             text-align: center;
-            border-radius: 40px 40px 0 0;
-            margin-top: auto;
         }
 
-        .cta-logout {
-            color: var(--accent);
-            text-decoration: none;
+        .minimal-header {
+            margin-bottom: 4rem;
+        }
+
+        .minimal-header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 2.8rem;
+            letter-spacing: -0.05em;
+            color: #1a4d2e;
+            margin-bottom: 0.5rem;
+        }
+
+        .minimal-header p {
+            color: #4f6f52;
+            font-weight: 500;
+            opacity: 0.6;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+        }
+
+        .minimal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .minimal-card {
+            background: #f8faf9;
+            border-radius: 24px;
+            padding: 2rem;
+            text-decoration: none !important;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .minimal-card:hover {
+            background: #ffffff;
+            border-color: #1a4d2e;
+            transform: translateY(-8px);
+            box-shadow: 0 30px 60px rgba(26, 77, 46, 0.08);
+        }
+
+        .minimal-card i {
+            font-size: 1.75rem;
+            color: #1a4d2e;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .minimal-card:hover i {
+            color: #f5bd02;
+            transform: scale(1.15);
+        }
+
+        .minimal-card span {
+            font-weight: 800;
+            font-size: 1.15rem;
+            color: #1a4d2e;
+            margin-bottom: 0.5rem;
+        }
+
+        .minimal-card small {
+            font-size: 0.85rem;
+            color: #4f6f52;
+            opacity: 0.7;
+            max-width: 200px;
+            line-height: 1.5;
+        }
+
+        .admin-tag {
+            font-size: 0.6rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #ef4444;
+            margin-bottom: 0.75rem;
+            background: rgba(239, 68, 68, 0.08);
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+        }
+
+        .logout-container {
+            margin-top: 5rem;
+        }
+
+        .btn-minimal-logout {
+            background: transparent;
+            border: none;
+            color: #4f6f52;
             font-weight: 700;
-            transition: var(--transition);
+            font-size: 0.8rem;
+            opacity: 0.4;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
         }
 
-        .cta-logout:hover {
-            color: white;
+        .btn-minimal-logout:hover {
+            opacity: 1;
+            color: #ef4444;
+            letter-spacing: 0.15em;
         }
 
-        /* Animations */
-        @keyframes fadeInUp {
+        @keyframes revealHub {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .animate-in {
-            animation: fadeInUp 0.8s ease-out forwards;
-        }
-
-        @media (max-width: 768px) {
-            .header-section h1 { font-size: 2.5rem; }
+        .minimal-hub {
+            animation: revealHub 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
     </style>
 </head>
+
 <body>
 
-    <div class="bg-blob" style="top: -100px; left: -100px;"></div>
-    <div class="bg-blob" style="bottom: -100px; right: -100px; background: radial-gradient(circle, rgba(245, 189, 2, 0.03) 0%, rgba(245, 189, 2, 0) 70%);"></div>
-
-    <div class="container d-flex flex-column min-vh-100">
+    <main class="minimal-hub">
         <!-- HEADER -->
-        <header class="header-section animate-in">
+        <header class="minimal-header">
+            <img th:src="@{/images/image.png}" alt="Logo" style="width: 70px; margin-bottom: 2rem;">
             <h1>Salud con Amor</h1>
-            <p>Panel Central de Operaciones. Selecciona un módulo para comenzar a gestionar tu bienestar natural.</p>
+            <p>Sistemas Centralizados de Gestión</p>
         </header>
 
-        <!-- MENU GRID -->
-        <div class="menu-grid">
+        <!-- GRID (Ordenado por Administración Primero) -->
+        <div class="minimal-grid">
             
-            <!-- PRODUCT CATALOG -->
-            <a href="/producto/listado" class="hub-card animate-in" style="animation-delay: 0.1s;">
-                <span class="card-badge">PÚBLICO</span>
-                <div class="icon-box">
-                    <i class="fas fa-shopping-bag"></i>
-                </div>
-                <h2>Catálogo</h2>
-                <p>Explora nuestra selección completa de productos naturales y orgánicos.</p>
+            <!-- 1. REPORTE MAESTRO (ADMIN) -->
+            <a href="/reportes/ventas-facturacion" class="minimal-card">
+                <div class="admin-tag">Administración</div>
+                <i class="fas fa-microchip"></i>
+                <span>Reporte Maestro</span>
+                <small>Análisis financiero de flujo de caja integral.</small>
             </a>
 
-            <!-- INVENTORY -->
-            <a href="/producto/inventario" class="hub-card animate-in" style="animation-delay: 0.2s;">
-                <span class="card-badge" style="background: #fdf2f2; color: #991b1b;">ADMIN</span>
-                <div class="icon-box">
-                    <i class="fas fa-boxes-stacked"></i>
-                </div>
-                <h2>Inventario</h2>
-                <p>Gestión de stock, códigos de producto y estados de disponibilidad.</p>
+            <!-- 2. INVENTARIO (ADMIN) -->
+            <a href="/producto/inventario" class="minimal-card">
+                <div class="admin-tag">Administración</div>
+                <i class="fas fa-boxes-stacked"></i>
+                <span>Inventario</span>
+                <small>Control de stock, códigos y existencias.</small>
             </a>
 
-            <!-- PROVEEDORES -->
-            <a href="/provedores" class="hub-card animate-in" style="animation-delay: 0.3s;">
-                <span class="card-badge" style="background: #fdf2f2; color: #991b1b;">ADMIN</span>
-                <div class="icon-box">
-                    <i class="fas fa-truck-field"></i>
-                </div>
-                <h2>Proveedores</h2>
-                <p>Directorio centralizado de suministradores y contactos comerciales.</p>
+            <!-- 3. PROVEEDORES (ADMIN) -->
+            <a href="/provedores" class="minimal-card">
+                <div class="admin-tag">Administración</div>
+                <i class="fas fa-truck-field"></i>
+                <span>Proveedores</span>
+                <small>Gestión de directorio y socios comerciales.</small>
             </a>
 
-            <!-- FACTURAS CLIENTE -->
-            <a href="/facturas-cliente" class="hub-card animate-in" style="animation-delay: 0.4s;">
-                <div class="icon-box">
-                    <i class="fas fa-file-invoice-dollar"></i>
-                </div>
-                <h2>Ventas Clientes</h2>
-                <p>Registro y consulta de facturación emitida a clientes finales.</p>
+            <!-- 4. INDICADORES (ADMIN) -->
+            <a href="/admin/ventas" class="minimal-card">
+                <div class="admin-tag">Administración</div>
+                <i class="fas fa-chart-line"></i>
+                <span>Indicadores</span>
+                <small>Análisis de métricas y rendimiento de ventas.</small>
             </a>
 
-            <!-- FACTURAS PROVEEDOR -->
-            <a href="/facturas-proveedor" class="hub-card animate-in" style="animation-delay: 0.5s;">
-                <div class="icon-box">
-                    <i class="fas fa-receipt"></i>
-                </div>
-                <h2>Compras Proveedor</h2>
-                <p>Control de facturas recibidas y órdenes de compra corporativas.</p>
+            <!-- 5. TALENTO (ADMIN) -->
+            <a href="/admin/rrhh" class="minimal-card">
+                <div class="admin-tag">Administración</div>
+                <i class="fas fa-users-gear"></i>
+                <span>Talento Humano</span>
+                <small>Gestión de equipo, asistencia y nómina.</small>
             </a>
 
-            <!-- VENTAS PANEL -->
-            <a href="/admin/ventas" class="hub-card animate-in" style="animation-delay: 0.6s;">
-                <span class="card-badge" style="background: #fdf2f2; color: #991b1b;">ADMIN</span>
-                <div class="icon-box">
-                    <i class="fas fa-chart-line"></i>
-                </div>
-                <h2>Panel Ventas</h2>
-                <p>Análisis de métricas, promedios y productos más vendidos.</p>
+            <!-- 6. CATÁLOGO (PÚBLICO) -->
+            <a href="/producto/listado" class="minimal-card">
+                <i class="fas fa-shopping-bag"></i>
+                <span>Catálogo</span>
+                <small>Vista de productos para el cliente final.</small>
             </a>
 
-            <!-- RRHH -->
-            <a href="/admin/rrhh" class="hub-card animate-in" style="animation-delay: 0.7s;">
-                <span class="card-badge" style="background: #fdf2f2; color: #991b1b;">ADMIN</span>
-                <div class="icon-box">
-                    <i class="fas fa-users-gear"></i>
-                </div>
-                <h2>Recursos Humanos</h2>
-                <p>Control de asistencia, nómina y gestión de empleados.</p>
+            <!-- 7. FACTURACIÓN CLIENTE -->
+            <a href="/facturas-cliente" class="minimal-card">
+                <i class="fas fa-file-invoice-dollar"></i>
+                <span>Facturas Cliente</span>
+                <small>Registro de ventas y facturación emitida.</small>
             </a>
 
-            <!-- REPORTE MAESTRO -->
-            <a href="/reportes/ventas-facturacion" class="hub-card animate-in" style="animation-delay: 0.8s;">
-                <span class="card-badge" style="background: #fdf2f2; color: #991b1b;">ADMIN</span>
-                <div class="icon-box" style="background: #00F5FF; color: #0A0C10;">
-                    <i class="fas fa-microchip"></i>
-                </div>
-                <h2>Reporte Maestro</h2>
-                <p>Análisis profundo de flujo de caja: Ventas vs Facturacion Proveedor.</p>
+            <!-- 8. COMPRAS PROVEEDOR -->
+            <a href="/facturas-proveedor" class="minimal-card">
+                <i class="fas fa-receipt"></i>
+                <span>Facturas Proveedor</span>
+                <small>Control de gastos y órdenes recibidas.</small>
             </a>
-
         </div>
 
-        <!-- FOOTER BAR -->
-        <footer class="footer-bar animate-in" style="animation-delay: 0.8s;">
-            <div class="container">
-                <p class="mb-2">© 2025 Salud con Amor Macrobiótica - Conectando con lo esencial.</p>
-                <form th:action="@{/logout}" method="post" class="d-inline">
-                    <button type="submit" class="border-0 bg-transparent cta-logout">Cerrar Sesión Segura</button>
-                </form>
-            </div>
-        </footer>
-    </div>
+        <!-- FOOTER / LOGOUT -->
+        <div class="logout-container">
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="btn-minimal-logout">
+                    <i class="fas fa-power-off me-2"></i>Finalizar Sesión Activa
+                </button>
+            </form>
+        </div>
+    </main>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

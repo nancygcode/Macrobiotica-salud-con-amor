@@ -1,527 +1,387 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reporte Maestro | Salud con Amor</title>
-    
-    <!-- Design Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;800&family=Plus+Jakarta+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    
+    <title>Reporte Maestro | Macrobiótica</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
     <!-- Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    <!-- Global CSS -->
+    <link rel="stylesheet" th:href="@{/css/macrobiotica.css}">
+
     <style>
-        :root {
-            --obsidian: #0A0C10;
-            --surface: #14181F;
-            --structural: #1D242E;
-            --border: #30363D;
-            --cyan: #00F5FF;
-            --magenta: #FF2E63;
-            --gold: #FFD369;
-            --text-main: #E6EDF3;
-            --text-dim: #8B949E;
-            --mono: 'JetBrains Mono', monospace;
-            --header: 'Outfit', sans-serif;
-            --body: 'Plus Jakarta Sans', sans-serif;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            background-color: var(--obsidian);
-            color: var(--text-main);
-            font-family: var(--body);
+            background-color: #ffffff;
+            color: #1a4d2e;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             min-height: 100vh;
-            overflow-x: hidden;
-            background-image: 
-                linear-gradient(var(--border) 1px, transparent 1px),
-                linear-gradient(90deg, var(--border) 1px, transparent 1px);
-            background-size: 100px 100px;
-            background-position: center center;
-            opacity: 1;
+            padding: 2.5rem 0;
         }
 
-        /* Ambient Blueprint Texture */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
+        /* Variables de color específicas para Reporte */
+        :root {
+            --expense-color: #d97706; /* Color ámbar/miel cálido para gastos */
+            --primary-green: #1a4d2e;
+            --neutral-bg: #f8faf9;
+        }
+
+        .report-content {
+            max-width: 1200px;
             width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 50% 50%, transparent 0%, var(--obsidian) 80%);
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .layout-container {
-            position: relative;
-            z-index: 2;
-            padding: 3rem;
-            max-width: 1600px;
             margin: 0 auto;
+            padding: 0 1.5rem;
         }
 
-        /* HEADER SECTION */
-        .report-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-bottom: 4rem;
-            border-bottom: 2px solid var(--border);
-            padding-bottom: 1.5rem;
+        .minimal-header-report {
+            text-align: center;
+            margin-bottom: 5rem;
         }
 
-        .header-title h1 {
-            font-family: var(--header);
+        .minimal-header-report h1 {
+            font-family: 'Outfit', sans-serif;
             font-weight: 800;
-            font-size: 3.5rem;
-            letter-spacing: -2px;
-            text-transform: uppercase;
-            line-height: 0.9;
-        }
-
-        .header-title p {
-            font-family: var(--mono);
-            color: var(--cyan);
-            font-weight: 700;
-            font-size: 0.8rem;
-            margin-top: 0.5rem;
-        }
-
-        .header-meta {
-            text-align: right;
-            font-family: var(--mono);
-            font-size: 0.75rem;
-            color: var(--text-dim);
-        }
-
-        /* KPI GRID - OVERLAPPING STYLE */
-        .kpi-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-            margin-bottom: 4rem;
-        }
-
-        .kpi-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            padding: 2rem;
-            position: relative;
-            transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
-            overflow: hidden;
-        }
-
-        .kpi-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--cyan);
-            box-shadow: 0 10px 30px rgba(0, 245, 255, 0.1);
-        }
-
-        .kpi-card::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(45deg, transparent 50%, var(--border) 50%);
-        }
-
-        .kpi-label {
-            font-family: var(--mono);
-            text-transform: uppercase;
-            font-size: 0.7rem;
-            color: var(--text-dim);
-            letter-spacing: 2px;
-            margin-bottom: 1rem;
-            display: block;
-        }
-
-        .kpi-value {
-            font-family: var(--header);
-            font-weight: 800;
-            font-size: 2.5rem;
+            font-size: 2.8rem;
+            letter-spacing: -0.05em;
+            color: var(--primary-green);
             margin-bottom: 0.5rem;
         }
 
-        .kpi-trend {
-            font-family: var(--mono);
-            font-size: 0.7rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .trend-up { color: var(--cyan); }
-        .trend-down { color: var(--magenta); }
-
-        /* DATA SECTIONS - INDUSTRIAL TABLE */
-        .section-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-        }
-
-        .data-panel {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            padding: 1.5rem;
-        }
-
-        .panel-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px dashed var(--border);
-        }
-
-        .panel-header h2 {
-            font-family: var(--header);
-            font-size: 1.2rem;
+        .minimal-header-report p {
+            color: #4f6f52;
+            font-weight: 500;
+            opacity: 0.6;
+            letter-spacing: 0.1em;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            font-size: 0.75rem;
         }
 
-        .blueprint-tag {
-            background: var(--cyan);
-            color: var(--obsidian);
-            font-family: var(--mono);
+        /* KPI Section */
+        .minimal-kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .kpi-minimal-card {
+            background: var(--neutral-bg);
+            border-radius: 24px;
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .kpi-minimal-card:hover {
+            background: #ffffff;
+            border-color: var(--primary-green);
+            box-shadow: 0 20px 40px rgba(26, 77, 46, 0.04);
+        }
+
+        .kpi-label {
+            font-size: 0.7rem;
             font-weight: 800;
-            font-size: 0.6rem;
-            padding: 2px 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #4f6f52;
+            opacity: 0.7;
+            margin-bottom: 1rem;
         }
 
-        .industrial-table {
+        .kpi-value {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 2.5rem;
+            color: var(--primary-green);
+            margin-bottom: 0.5rem;
+        }
+
+        .kpi-sub {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary-green);
+        }
+
+        /* Minimal Table */
+        .minimal-table-container {
+            background: #ffffff;
+            border: 1px solid #f1f5f2;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 3rem;
+        }
+
+        .minimal-table {
             width: 100%;
             border-collapse: collapse;
         }
 
-        .industrial-table th {
+        .minimal-table th {
+            background: var(--neutral-bg);
+            padding: 1rem 1.5rem;
             text-align: left;
-            font-family: var(--mono);
-            font-size: 0.65rem;
-            color: var(--text-dim);
+            font-size: 0.7rem;
+            font-weight: 800;
             text-transform: uppercase;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--border);
+            color: #4f6f52;
+            letter-spacing: 0.1em;
         }
 
-        .industrial-table td {
-            padding: 1.25rem 0;
-            border-bottom: 1px solid rgba(48, 54, 61, 0.5);
+        .minimal-table td {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid #f1f5f2;
+            font-size: 0.95rem;
+        }
+
+        .minimal-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .btn-minimal-back {
+            background: transparent;
+            border: 1px solid var(--primary-green);
+            color: var(--primary-green);
+            font-weight: 700;
+            padding: 0.75rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
             font-size: 0.9rem;
         }
 
-        .industrial-table tr:hover td {
-            color: var(--cyan);
-            background: rgba(0, 245, 255, 0.02);
+        .btn-minimal-back:hover {
+            background: var(--primary-green);
+            color: #ffffff;
         }
 
-        .val-mono {
-            font-family: var(--mono);
-            font-weight: 700;
-            color: var(--text-main);
-        }
-
-        .bar-container {
+        .bar-wrap {
             width: 100px;
-            height: 4px;
-            background: var(--structural);
-            margin-top: 4px;
-            position: relative;
+            height: 6px;
+            background: #eef2ef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 5px;
         }
 
-        .bar-fill {
+        .bar-val {
             height: 100%;
-            background: var(--cyan);
-            position: absolute;
-            left: 0;
-            top: 0;
+            background: var(--primary-green);
+            border-radius: 10px;
         }
 
-        /* NAVIGATION BACK */
-        .nav-back {
-            position: fixed;
-            bottom: 2rem;
-            left: 2rem;
-            z-index: 10;
+        /* Chart container */
+        .chart-panel {
+            background: var(--neutral-bg);
+            border-radius: 30px;
+            padding: 3rem;
+            margin-bottom: 4rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .btn-blueprint {
-            background: var(--obsidian);
-            border: 1px solid var(--cyan);
-            color: var(--cyan);
-            padding: 0.8rem 1.5rem;
-            font-family: var(--mono);
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            text-decoration: none;
+        .panel-title {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            color: var(--primary-green);
             display: flex;
             align-items: center;
-            gap: 1rem;
-            transition: all 0.3s;
+            gap: 0.75rem;
+            width: 100%;
         }
 
-        .btn-blueprint:hover {
-            background: var(--cyan);
-            color: var(--obsidian);
-            box-shadow: 0 0 20px rgba(0, 245, 255, 0.4);
+        @media (max-width: 992px) {
+            .row-data {
+                flex-direction: column;
+            }
         }
-
-        /* ANIMATIONS */
-        @keyframes slideInUp {
-            from { transform: translateY(30px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .animate-item {
-            animation: slideInUp 0.8s cubic-bezier(0.19, 1, 0.22, 1) forwards;
-            opacity: 0;
-        }
-
-        .del-1 { animation-delay: 0.1s; }
-        .del-2 { animation-delay: 0.2s; }
-        .del-3 { animation-delay: 0.3s; }
-        .del-4 { animation-delay: 0.4s; }
-        .del-5 { animation-delay: 0.5s; }
-
     </style>
 </head>
+
 <body>
 
-    <div class="layout-container">
+    <main class="report-content">
         <!-- HEADER -->
-        <header class="report-header animate-item del-1">
-            <div class="header-title">
-                <h1>Reporte Maestro</h1>
-                <p>SALUD CON AMOR // ANALYTICS DIVISION</p>
-            </div>
-            <div class="header-meta">
-                <div>SYSTEM STATUS: <span style="color: var(--cyan)">OPTIMAL</span></div>
-                <div>CYCLE IDENTIFIER: <span th:text="${#dates.format(#dates.createNow(), 'yyyy.MM.dd.HHmm')}">2025.04.12.2340</span></div>
-            </div>
+        <header class="minimal-header-report">
+            <img th:src="@{/images/image.png}" alt="Logo" style="width: 65px; margin-bottom: 1.5rem;">
+            <h1>Reporte Maestro</h1>
+            <p>Estado Financiero Consolidado</p>
         </header>
 
         <!-- KPI GRID -->
-        <section class="kpi-grid">
-            <div class="kpi-card animate-item del-2">
-                <span class="kpi-label">Ingresos Totales (Ventas)</span>
-                <div class="kpi-value" th:text="'₡' + ${#numbers.formatDecimal(totalVentas, 1, 'COMMA', 2, 'POINT')}">₡0.00</div>
-                <div class="kpi-trend trend-up">
-                    <i class="fas fa-arrow-up"></i>
-                    <span th:text="${cantFacturasVentas} + ' EVENTOS REGISTRADOS'">0 EVENTOS</span>
+        <div class="minimal-kpi-grid">
+            <!-- INGRESOS -->
+            <div class="kpi-minimal-card">
+                <span class="kpi-label">Ingresos Totales</span>
+                <div class="kpi-value" th:text="'₡' + ${#numbers.formatDecimal(totalVentas, 1, 'COMMA', 0, 'POINT')}">₡0</div>
+                <div class="kpi-sub">
+                    <i class="fas fa-check-circle me-1 opacity-40"></i>
+                    <span th:text="${cantFacturasVentas} + ' Facturas Emitidas'">0 Facturas</span>
                 </div>
             </div>
-            <div class="kpi-card animate-item del-3">
-                <span class="kpi-label">Gastos Proveedores (Facturación)</span>
-                <div class="kpi-value" th:text="'₡' + ${#numbers.formatDecimal(totalGastoProvedores, 1, 'COMMA', 2, 'POINT')}">₡0.00</div>
-                <div class="kpi-trend trend-down">
-                    <i class="fas fa-arrow-down"></i>
-                    <span th:text="${cantFacturasProvedores} + ' OBLIGACIONES ACTIVAS'">0 EVENTOS</span>
+
+            <!-- GASTOS (Nuevo Color) -->
+            <div class="kpi-minimal-card" style="border-left: 5px solid var(--expense-color);">
+                <span class="kpi-label" style="color: var(--expense-color);">Gastos Operativos</span>
+                <div class="kpi-value" style="color: var(--expense-color);" th:text="'₡' + ${#numbers.formatDecimal(totalGastoProvedores, 1, 'COMMA', 0, 'POINT')}">₡0</div>
+                <div class="kpi-sub" style="color: var(--expense-color);">
+                    <i class="fas fa-file-invoice me-1 opacity-40"></i>
+                    <span th:text="${cantFacturasProvedores} + ' Obligaciones'">0 Facturas</span>
                 </div>
             </div>
-            <div class="kpi-card animate-item del-4">
-                <span class="kpi-label">Balance Neto Operativo</span>
+
+            <!-- BALANCE -->
+            <div class="kpi-minimal-card" th:style="${balanceNeto.doubleValue() >= 0 ? 'background: #f0f7f2;' : 'background: #fff5f5;'}">
+                <span class="kpi-label">Balance Neto</span>
                 <div class="kpi-value" 
-                     th:style="${balanceNeto.doubleValue() >= 0 ? 'color: var(--cyan)' : 'color: var(--magenta)'}"
-                     th:text="'₡' + ${#numbers.formatDecimal(balanceNeto, 1, 'COMMA', 2, 'POINT')}">₡0.00</div>
-                <div class="kpi-trend" th:style="${balanceNeto.doubleValue() >= 0 ? 'color: var(--cyan)' : 'color: var(--magenta)'}">
-                    <i class="fas" th:classappend="${balanceNeto.doubleValue() >= 0 ? 'fa-chart-line' : 'fa-triangle-exclamation'}"></i>
-                    <span th:text="${balanceNeto.doubleValue() >= 0 ? 'MARGEN POSITIVO' : 'DÉFICIT DETECTADO'}">READY</span>
+                     th:classappend="${balanceNeto.doubleValue() >= 0 ? 'text-primary-green' : 'text-danger'}"
+                     th:text="'₡' + ${#numbers.formatDecimal(balanceNeto, 1, 'COMMA', 0, 'POINT')}">₡0</div>
+                <div class="kpi-sub">
+                    <i class="fas me-1" th:classappend="${balanceNeto.doubleValue() >= 0 ? 'fa-chart-line text-success' : 'fa-triangle-exclamation text-danger'}"></i>
+                    <span th:text="${balanceNeto.doubleValue() >= 0 ? 'Flujo Positivo' : 'Déficit Detectado'}">Estado</span>
                 </div>
-            </div>
-        </section>
-
-        <!-- CHARTS SECTION -->
-        <section class="section-grid" style="margin-bottom: 3rem;">
-            <div class="data-panel animate-item del-4" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem;">
-                <div class="panel-header" style="width: 100%;">
-                    <h2>Proporción Flujo de Caja</h2>
-                    <span class="blueprint-tag">CHART: PIE_ANALYSIS</span>
-                </div>
-                <div style="width: 300px; height: 300px; position: relative;">
-                    <canvas id="balanceChart"></canvas>
-                </div>
-            </div>
-            <div class="data-panel animate-item del-4" style="border-color: var(--gold); display: flex; flex-direction: column; justify-content: center;">
-                <div class="panel-header">
-                    <h2>Insights de Operación</h2>
-                    <span class="blueprint-tag" style="background: var(--gold)">AI: ASSISTANT</span>
-                </div>
-                <div style="font-family: var(--mono); font-size: 0.85rem; line-height: 1.6; color: var(--text-dim);">
-                    <p style="margin-bottom: 1rem;"><i class="fas fa-microchip" style="color: var(--cyan)"></i> ANALIZANDO CICLO ACTUAL...</p>
-                    <p th:if="${totalVentas.doubleValue() > totalGastoProvedores.doubleValue()}" style="color: var(--cyan)">
-                        > RENDIMIENTO ÓPTIMO: Tus ventas superan los gastos en un <span th:text="${#numbers.formatDecimal((totalVentas - totalGastoProvedores) * 100 / totalVentas, 1, 2)}">0</span>%. Mantén el ritmo de adquisición.
-                    </p>
-                    <p th:if="${totalVentas.doubleValue() <= totalGastoProvedores.doubleValue()}" style="color: var(--magenta)">
-                        > ALERTA DE LIQUIDEZ: Los gastos actuales igualan o superan las ventas del periodo. Revisa las órdenes de compra pendientes.
-                    </p>
-                    <p style="margin-top: 1.5rem; border-top: 1px dashed var(--border); padding-top: 1rem;">
-                        DISTRIBUCIÓN DE VENDEDORES DETECTADA: <span th:text="${#lists.size(ventasPorVendedor)}">0</span> ACTIVOS.
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <!-- DATA SECTION -->
-        <div class="section-grid">
-            <!-- VENTAS POR VENDEDOR -->
-            <div class="data-panel animate-item del-5">
-                <div class="panel-header">
-                    <h2>Desempeño de Vendedores</h2>
-                    <span class="blueprint-tag">MODULE: SALES_FORC</span>
-                </div>
-                <table class="industrial-table">
-                    <thead>
-                        <tr>
-                            <th>Vendedor (ID)</th>
-                            <th>Docs</th>
-                            <th>Total Generado</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="v : ${ventasPorVendedor}">
-                            <td th:text="${v[0]}">#ID</td>
-                            <td class="val-mono" th:text="${v[1]}">0</td>
-                            <td>
-                                <div class="val-mono" th:text="'₡' + ${#numbers.formatDecimal(v[2], 1, 'COMMA', 2, 'POINT')}">₡0.00</div>
-                                <div class="bar-container">
-                                    <div class="bar-fill" th:style="'width: ' + (${totalVentas.doubleValue() > 0 ? (v[2] * 100 / totalVentas) : 0}) + '%'"></div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr th:if="${#lists.isEmpty(ventasPorVendedor)}">
-                            <td colspan="3" style="color: var(--text-dim); text-align: center; padding: 2rem;">SIN DATOS DE TRANSMISIÓN</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- GASTOS POR PROVEEDOR -->
-            <div class="data-panel animate-item del-5" style="border-color: var(--magenta)">
-                <div class="panel-header">
-                    <h2 style="color: var(--magenta)">Distribución de Gastos</h2>
-                    <span class="blueprint-tag" style="background: var(--magenta)">MODULE: PAYABLES</span>
-                </div>
-                <table class="industrial-table">
-                    <thead>
-                        <tr>
-                            <th>Proveedor</th>
-                            <th>Fact.</th>
-                            <th>Total Pagado</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="g : ${gastoPorProvedor}">
-                            <td th:text="${g[0]}">NOMBRE</td>
-                            <td class="val-mono" th:text="${g[1]}">0</td>
-                            <td>
-                                <div class="val-mono" th:text="'₡' + ${#numbers.formatDecimal(g[2], 1, 'COMMA', 2, 'POINT')}">₡0.00</div>
-                                <div class="bar-container">
-                                    <div class="bar-fill" style="background: var(--magenta)" 
-                                         th:style="'background: var(--magenta); width: ' + (${totalGastoProvedores.doubleValue() > 0 ? (g[2] * 100 / totalGastoProvedores) : 0}) + '%'"></div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr th:if="${#lists.isEmpty(gastoPorProvedor)}">
-                            <td colspan="3" style="color: var(--text-dim); text-align: center; padding: 2rem;">SIN OBLIGACIONES REGISTRADAS</td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
         </div>
 
-        <!-- PRODUCTOS MÁS VENDIDOS -->
-        <div class="data-panel animate-item del-5" style="margin-top: 3rem; border-color: var(--gold)">
-            <div class="panel-header">
-                <h2 style="color: var(--gold)">Top Insumos & Productos</h2>
-                <span class="blueprint-tag" style="background: var(--gold)">MODULE: INVENTORY</span>
+        <!-- CHART AREA (Expanded and Minimalist) -->
+        <div class="chart-panel shadow-sm border-0">
+            <div class="panel-title">
+                <i class="fas fa-chart-pie"></i> Proporción de Flujo de Caja
             </div>
-            <table class="industrial-table">
-                <thead>
-                    <tr>
-                        <th>Producto / Descripción</th>
-                        <th>Volumen de Salida</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="p : ${productosMasVendidos}">
-                        <td th:text="${p[0]}">PRODUCTO</td>
-                        <td class="val-mono" th:text="${p[1]} + ' UNIDADES'">0</td>
-                    </tr>
-                    <tr th:if="${#lists.isEmpty(productosMasVendidos)}">
-                        <td colspan="2" style="color: var(--text-dim); text-align: center; padding: 2rem;">SIN MOVIMIENTOS DETECTADOS</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div style="width: 100%; max-width: 350px; height: 350px;">
+                <canvas id="minimalBalanceChart"></canvas>
+            </div>
         </div>
-    </div>
 
-    <!-- NAVIGATION BACK -->
-    <div class="nav-back animate-item del-5">
-        <a href="/" class="btn-blueprint">
-            <i class="fas fa-chevron-left"></i>
-            REGRESAR AL CORE
-        </a>
-    </div>
+        <!-- LISTS SECTION -->
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <div class="panel-title px-4 mb-3">
+                    <i class="fas fa-user-tag"></i> Desempeño Comercial
+                </div>
+                <div class="minimal-table-container mx-2 shadow-sm border-0">
+                    <table class="minimal-table">
+                        <thead>
+                            <tr>
+                                <th>Vendedor</th>
+                                <th>Docs</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="v : ${ventasPorVendedor}">
+                                <td class="fw-700" th:text="${v[0]}">#ID</td>
+                                <td th:text="${v[1]}">0</td>
+                                <td>
+                                    <div class="fw-700 text-primary-green" th:text="'₡' + ${#numbers.formatDecimal(v[2], 1, 'COMMA', 0, 'POINT')}">₡0</div>
+                                    <div class="bar-wrap">
+                                        <div class="bar-val" th:style="'width: ' + (${totalVentas.doubleValue() > 0 ? (v[2] * 100 / totalVentas) : 0}) + '%'"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="panel-title px-4 mb-3">
+                    <i class="fas fa-store"></i> Distribución de Gastos
+                </div>
+                <div class="minimal-table-container mx-2 shadow-sm border-0">
+                    <table class="minimal-table">
+                        <thead>
+                            <tr>
+                                <th>Proveedor</th>
+                                <th>Fact.</th>
+                                <th>Total Pagado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="g : ${gastoPorProvedor}">
+                                <td class="fw-700" th:text="${g[0]}">Nombre</td>
+                                <td th:text="${g[1]}">0</td>
+                                <td>
+                                    <div class="fw-700" style="color: var(--expense-color);" th:text="'₡' + ${#numbers.formatDecimal(g[2], 1, 'COMMA', 0, 'POINT')}">₡0</div>
+                                    <div class="bar-wrap">
+                                        <div class="bar-val" th:style="'background: var(--expense-color); width: ' + (${totalGastoProvedores.doubleValue() > 0 ? (g[2] * 100 / totalGastoProvedores) : 100}) + '%'"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ACTION -->
+        <div class="mt-5 text-center">
+            <a href="/" class="btn-minimal-back">
+                <i class="fas fa-arrow-left"></i> Regresar al Inicio
+            </a>
+        </div>
+    </main>
 
     <!-- CHART INITIALIZATION -->
     <script th:inline="javascript">
         /*<![CDATA[*/
-        const ctx = document.getElementById('balanceChart').getContext('2d');
+        const ctx = document.getElementById('minimalBalanceChart').getContext('2d');
         const v = /*[[${totalVentas}]]*/ 0;
         const g = /*[[${totalGastoProvedores}]]*/ 0;
 
         new Chart(ctx, {
-            type: 'pie',
+            type: 'doughnut',
             data: {
-                labels: ['Ventas', 'Gastos'],
+                labels: ['Ingresos (Ventas)', 'Gastos (Proveedor)'],
                 datasets: [{
                     data: [v, g],
                     backgroundColor: [
-                        '#00F5FF', // Cyan
-                        '#FF2E63'  // Magenta
+                        '#1a4d2e', // Green
+                        '#d97706'  // Amber/Honey for Expenses
                     ],
-                    borderColor: '#0A0C10',
+                    borderColor: '#ffffff',
                     borderWidth: 4,
-                    hoverOffset: 15
+                    hoverOffset: 12
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                cutout: '78%',
                 plugins: {
                     legend: {
                         position: 'bottom',
                         labels: {
-                            color: '#8B949E',
-                            font: {
-                                family: 'JetBrains Mono',
-                                size: 10
-                            },
-                            padding: 20
+                            color: '#4f6f52',
+                            font: { size: 11, family: 'Plus Jakarta Sans', weight: '700' },
+                            padding: 25,
+                            usePointStyle: true
                         }
                     },
                     tooltip: {
-                        backgroundColor: '#14181F',
-                        titleFont: { family: 'Outfit', size: 14 },
-                        bodyFont: { family: 'JetBrains Mono', size: 12 },
-                        borderColor: '#30363D',
-                        borderWidth: 1,
-                        displayColors: false
+                        backgroundColor: '#1a4d2e',
+                        padding: 15,
+                        cornerRadius: 15,
+                        titleFont: { family: 'Outfit', size: 14 }
                     }
                 }
             }
@@ -529,4 +389,5 @@
         /*]]>*/
     </script>
 </body>
+
 </html>

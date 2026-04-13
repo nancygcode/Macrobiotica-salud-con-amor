@@ -1,420 +1,261 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Salud con Amor - Catálogo de Productos</title>
-    
-    <!-- Premium Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome -->
+    <title>Catálogo de Productos | Macrobiótica</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
-    
+
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
+    <!-- Global CSS -->
+    <link rel="stylesheet" th:href="@{/css/macrobiotica.css}">
+
     <style>
-        :root {
-            --primary: #1a4d2e;
-            --primary-light: #4f6f52;
-            --secondary: #e8dfca;
-            --accent: #f5bd02;
-            --dark: #092613;
-            --white: #ffffff;
-            --glass: rgba(255, 255, 255, 0.8);
-            --transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
-        }
-
         body {
-            font-family: 'Outfit', sans-serif;
-            background-color: #f0f4f1;
-            color: var(--dark);
-            overflow-x: hidden;
+            background-color: #ffffff;
+            color: #1a4d2e;
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
-        /* Standalone Navbar */
-        .standalone-nav {
-            background: rgba(26, 77, 46, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        .nav-brand {
-            font-family: 'Playfair Display', serif;
-            color: var(--white);
-            font-size: 1.8rem;
-            text-decoration: none;
-            font-weight: 700;
-        }
-
-        .nav-link-custom {
-            color: rgba(255,255,255,0.8);
-            text-decoration: none;
-            margin: 0 1.5rem;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: var(--transition);
-        }
-
-        .nav-link-custom:hover {
-            color: var(--accent);
-            transform: translateY(-2px);
-        }
-
-        /* Hero Image Section */
-        .hero-banner {
-            height: 60vh;
-            background: linear-gradient(rgba(9, 38, 19, 0.7), rgba(9, 38, 19, 0.5)), 
-                        url('https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=2000&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .catalog-hero {
+            padding: 6rem 0 4rem;
             text-align: center;
-            color: var(--white);
-            clip-path: ellipse(150% 100% at 50% 0%);
+            background: #f8faf9;
+            margin-bottom: 4rem;
         }
 
-        .hero-content h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 4.5rem;
+        .catalog-hero h1 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 3.5rem;
+            letter-spacing: -0.04em;
+            color: #1a4d2e;
             margin-bottom: 1rem;
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
         }
 
-        .hero-content p {
-            font-size: 1.4rem;
-            max-width: 700px;
+        .catalog-hero p {
+            font-size: 1.1rem;
+            color: #4f6f52;
+            opacity: 0.7;
+            max-width: 600px;
             margin: 0 auto;
-            opacity: 0.9;
         }
 
         /* Filter Section */
-        .filter-container {
-            margin-top: -50px;
-            background: var(--white);
-            padding: 2rem;
-            border-radius: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+        .filter-strip {
             display: flex;
             justify-content: center;
             gap: 1rem;
+            margin-bottom: 4rem;
+            padding: 0 1rem;
             flex-wrap: wrap;
-            position: relative;
-            z-index: 10;
         }
 
-        .btn-filter {
-            padding: 0.8rem 2rem;
-            border-radius: 50px;
-            border: 2px solid #e1e9e2;
-            background: transparent;
-            color: var(--primary);
+        .btn-filter-minimal {
+            background: #ffffff;
+            border: 1px solid #eef2ef;
+            padding: 0.6rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
             font-weight: 700;
-            transition: var(--transition);
+            color: #4f6f52;
+            transition: all 0.3s ease;
+            cursor: pointer;
         }
 
-        .btn-filter:hover, .btn-filter.active {
-            background: var(--primary);
-            color: var(--white);
-            border-color: var(--primary);
-            box-shadow: 0 10px 20px rgba(26, 77, 46, 0.2);
+        .btn-filter-minimal:hover, .btn-filter-minimal.active {
+            background: #1a4d2e;
+            color: #ffffff;
+            border-color: #1a4d2e;
+            box-shadow: 0 10px 20px rgba(26, 77, 46, 0.1);
         }
 
         /* Product Grid */
-        .product-grid {
-            padding: 5rem 0;
+        .product-grid-minimal {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 3rem;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 6rem;
         }
 
-        .product-card {
-            background: var(--white);
-            border-radius: 35px;
-            padding: 1.5rem;
-            transition: var(--transition);
-            border: 1px solid rgba(0,0,0,0.03);
+        .product-card-minimal {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 1.25rem;
+            border: 1px solid #f1f5f2;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
             position: relative;
+            text-decoration: none;
+            color: inherit;
             display: flex;
             flex-direction: column;
         }
 
-        .product-card:hover {
-            transform: translateY(-15px);
-            box-shadow: 0 40px 80px rgba(0,0,0,0.1);
+        .product-card-minimal:hover {
+            transform: translateY(-8px);
+            border-color: #1a4d2e;
+            box-shadow: 0 20px 40px rgba(26, 77, 46, 0.05);
         }
 
-        .card-img-wrapper {
+        .card-img-container {
             width: 100%;
-            height: 300px;
-            border-radius: 25px;
+            height: 240px;
+            background: #f8faf9;
+            border-radius: 18px;
             overflow: hidden;
-            background: #f8f9f8;
             margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .card-img-wrapper img {
-            width: 100%;
-            height: 100%;
+        .card-img-container img {
+            max-width: 80%;
+            max-height: 80%;
             object-fit: contain;
-            transition: var(--transition);
+            transition: transform 0.5s ease;
         }
 
-        .product-card:hover .card-img-wrapper img {
-            transform: scale(1.1) rotate(2deg);
+        .product-card-minimal:hover .card-img-container img {
+            transform: scale(1.1);
         }
 
-        .stock-badge {
+        .stock-tag {
             position: absolute;
-            top: 2.5rem;
-            right: 2.5rem;
-            background: rgba(255,255,255,0.9);
-            padding: 0.5rem 1.2rem;
-            border-radius: 15px;
-            font-size: 0.8rem;
+            top: 2rem;
+            right: 2rem;
+            background: #ffffff;
+            padding: 0.4rem 0.8rem;
+            border-radius: 10px;
+            font-size: 0.65rem;
             font-weight: 800;
-            color: var(--primary);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            z-index: 5;
+            color: #1a4d2e;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            z-index: 2;
         }
 
-        .product-info h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.6rem;
-            margin-bottom: 0.8rem;
-            color: var(--primary);
+        .product-meta h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
-        .product-info p {
-            color: #718096;
-            font-size: 0.95rem;
-            line-height: 1.6;
+        .product-meta p {
+            font-size: 0.85rem;
+            color: #4f6f52;
+            opacity: 0.6;
             margin-bottom: 1.5rem;
+            line-height: 1.5;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
 
-        .card-footer-custom {
+        .card-footer-minimal {
+            margin-top: auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: auto;
         }
 
-        .price-tag {
-            font-size: 1.8rem;
+        .price-minimal {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.4rem;
             font-weight: 800;
-            color: var(--dark);
+            color: #1a4d2e;
         }
 
-        .btn-cart {
-            background: var(--accent);
-            color: var(--dark);
-            width: 55px;
-            height: 55px;
-            border-radius: 20px;
+        .btn-view-minimal {
+            width: 44px;
+            height: 44px;
+            background: #1a4d2e;
+            color: #ffffff;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: none;
-            transition: var(--transition);
+            transition: all 0.3s ease;
         }
 
-        .btn-cart:hover {
-            background: var(--dark);
-            color: var(--white);
-            transform: scale(1.1) rotate(15deg);
-        }
-
-        /* Standalone Footer */
-        .standalone-footer {
-            background: var(--dark);
-            color: var(--white);
-            padding: 6rem 0 3rem;
-            margin-top: 5rem;
-        }
-
-        .footer-logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
-            display: block;
-        }
-
-        .social-links a {
-            color: var(--white);
-            font-size: 1.5rem;
-            margin-right: 1.5rem;
-            opacity: 0.7;
-            transition: var(--transition);
-        }
-
-        .social-links a:hover {
-            opacity: 1;
-            color: var(--accent);
-        }
-
-        .copyright-bar {
-            border-top: 1px solid rgba(255,255,255,0.1);
-            margin-top: 4rem;
-            padding-top: 2rem;
-            text-align: center;
-            font-size: 0.9rem;
-            opacity: 0.6;
-        }
-
-        /* Animations */
-        @keyframes reveal {
-            from { opacity: 0; transform: translateY(50px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .reveal {
-            animation: reveal 1s forwards;
+        .product-card-minimal:hover .btn-view-minimal {
+            background: #4f6f52;
+            transform: rotate(90deg);
         }
     </style>
 </head>
+
 <body>
 
-    <!-- STANDALONE NAVBAR -->
-    <nav class="standalone-nav">
-        <div class="container d-flex justify-content-between align-items-center">
-            <a href="/" class="nav-brand">Salud con Amor</a>
-            <div class="d-none d-lg-block">
-                <a href="/" class="nav-link-custom">Inicio</a>
-                <a href="/producto/listado" class="nav-link-custom" style="color: var(--accent);">Productos</a>
-                <a href="/login" class="nav-link-custom">Mi Cuenta</a>
-                <a href="#" class="nav-link-custom"><i class="fas fa-shopping-basket"></i></a>
-            </div>
-        </div>
-    </nav>
+    <!-- Shared Navbar -->
+    <div th:replace="~{fragments/_header :: header}"></div>
 
-    <!-- HERO SECTION -->
-    <section class="hero-banner">
-        <div class="hero-content">
-            <h1 class="reveal">Bienestar Natural</h1>
-            <p class="reveal" style="animation-delay: 0.2s;">Encuentra el equilibrio perfecto entre tu cuerpo y la naturaleza con nuestra selección exclusiva.</p>
+    <header class="catalog-hero">
+        <div class="container">
+            <h1>Bienestar Natural</h1>
+            <p>Descubre nuestra selección de productos premium diseñados para armonizar tu cuerpo y mente.</p>
         </div>
-    </section>
+    </header>
 
-    <!-- MAIN CONTENT -->
     <main class="container">
-        <!-- FILTER SECTION -->
-        <div class="filter-container reveal" style="animation-delay: 0.4s;">
-            <button class="btn-filter active">Todos los Productos</button>
-            <button class="btn-filter">Suplementos</button>
-            <button class="btn-filter">Hierbas Orgánicas</button>
-            <button class="btn-filter">Cuidado Vital</button>
-            <button class="btn-filter">Especiales</button>
+        <!-- FILTER STRIP -->
+        <div class="filter-strip">
+            <div class="btn-filter-minimal active">Todos</div>
+            <div class="btn-filter-minimal">Nutrición</div>
+            <div class="btn-filter-minimal">Vitalidad</div>
+            <div class="btn-filter-minimal">Cuidado Piel</div>
+            <div class="btn-filter-minimal">Ofertas</div>
         </div>
 
         <!-- PRODUCT GRID -->
-        <div class="product-grid">
-            <!-- Thymeleaf loop for products -->
-            <div th:each="producto : ${productos}" class="product-card reveal">
-                <div class="stock-badge" th:if="${producto.stock > 0}" th:text="${producto.stock} + ' disponibles'">12 disponibles</div>
-                <div class="stock-badge text-danger" th:if="${producto.stock == 0}">Agotado</div>
-                
-                <div class="card-img-wrapper">
-                    <img th:src="@{/images/natural-supplements.jpg}" 
-                         src="https://images.unsplash.com/photo-1512152272829-e3139592d56f?q=80" 
-                         alt="Producto">
-                </div>
-                
-                <div class="product-info">
-                    <h3 th:text="${producto.nombre}">Nombre Premium</h3>
-                    <p th:text="${producto.descripcion}">Una mezcla única de ingredientes naturales diseñada para potenciar tu energía y bienestar diario sin químicos añadidos.</p>
+        <div class="product-grid-minimal">
+            <th:block th:each="producto : ${productos}">
+                <a th:href="@{/producto/detalle/{id}(id=${producto.codigoProducto})}" class="product-card-minimal">
+                    <span class="stock-tag" th:text="${producto.stock} > 0 ? ${producto.stock} + ' Disponibles' : 'Agotado'"
+                          th:style="${producto.stock > 0 ? '' : 'color: #ef4444;'}">12 Disponibles</span>
                     
-                    <div class="card-footer-custom">
-                        <span class="price-tag" th:text="'₡' + ${producto.precio}">₡15,000</span>
-                        <a href="#" class="btn-cart">
-                            <i class="fas fa-cart-plus fa-lg"></i>
-                        </a>
+                    <div class="card-img-container">
+                        <!-- Using generic image if one is not provided -->
+                        <img th:src="@{/images/natural-supplements.jpg}" alt="Producto">
                     </div>
-                </div>
-            </div>
-            
-            <!-- FALLBACK IF EMPTY -->
-            <div th:if="${#lists.isEmpty(productos)}" class="col-12 text-center py-5">
-                <i class="fas fa-seedling fa-4x text-muted mb-4"></i>
-                <h2>Nuestro jardín está creciendo...</h2>
-                <p>Vuelve pronto para descubrir nuevos secretos naturales.</p>
-            </div>
+
+                    <div class="product-meta">
+                        <h3 th:text="${producto.nombre}">Nombre del Producto</h3>
+                        <p th:text="${producto.descripcion}">Descripción resumida del bienestar que aporta este producto natural.</p>
+                        
+                        <div class="card-footer-minimal">
+                            <span class="price-minimal" th:text="'₡' + ${#numbers.formatDecimal(producto.precio, 1, 'COMMA', 0, 'POINT')}">₡0</span>
+                            <div class="btn-view-minimal">
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </th:block>
+        </div>
+
+        <!-- Empty State -->
+        <div th:if="${#lists.isEmpty(productos)}" class="text-center py-5 opacity-40">
+            <i class="fas fa-seedling fa-4x mb-4"></i>
+            <h2>Próximamente...</h2>
+            <p>Nuestra selección natural se está renovando para ti.</p>
         </div>
     </main>
 
-    <!-- STANDALONE FOOTER -->
-    <footer class="standalone-footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-4 mb-5 mb-lg-0">
-                    <span class="footer-logo">Salud con Amor</span>
-                    <p>Dedicados a traer la esencia de la naturaleza directamente a tu hogar, promoviendo una vida consciente y saludable.</p>
-                    <div class="social-links mt-4">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-facebook"></i></a>
-                        <a href="#"><i class="fab fa-whatsapp"></i></a>
-                    </div>
-                </div>
-                <div class="col-lg-2 offset-lg-1 col-6">
-                    <h5 class="mb-4">Explora</h5>
-                    <ul class="list-unstyled">
-                        <li class="mb-2"><a href="#" class="text-white opacity-75 text-decoration-none">Suplementos</a></li>
-                        <li class="mb-2"><a href="#" class="text-white opacity-75 text-decoration-none">Vitaminas</a></li>
-                        <li class="mb-2"><a href="#" class="text-white opacity-75 text-decoration-none">Blogs</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-2 col-6">
-                    <h5 class="mb-4">Soporte</h5>
-                    <ul class="list-unstyled">
-                        <li class="mb-2"><a href="#" class="text-white opacity-75 text-decoration-none">Contacto</a></li>
-                        <li class="mb-2"><a href="#" class="text-white opacity-75 text-decoration-none">Envíos</a></li>
-                        <li class="mb-2"><a href="#" class="text-white opacity-75 text-decoration-none">Políticas</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-3">
-                    <h5 class="mb-4">Boletín Natural</h5>
-                    <p class="small opacity-75 mb-3">Recibe consejos de bienestar y ofertas exclusivas.</p>
-                    <div class="input-group">
-                        <input type="text" class="form-control bg-transparent text-white border-secondary" placeholder="Tu email">
-                        <button class="btn btn-warning"><i class="fas fa-paper-plane"></i></button>
-                    </div>
-                </div>
-            </div>
-            <div class="copyright-bar">
-                © 2025 Salud con Amor Macrobiótica. Inspirado en la vida.
-            </div>
-        </div>
-    </footer>
-
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <script>
-        // Reveal elements on scroll
-        const observerOptions = {
-            threshold: 0.1
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-    </script>
 </body>
+
 </html>
