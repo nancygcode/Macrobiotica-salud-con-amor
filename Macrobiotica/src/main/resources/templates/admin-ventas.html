@@ -7,87 +7,74 @@
     <title>Panel de Ventas - Admin | Salud con Amor</title>
 
     <!-- Google Fonts -->
-    <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
 
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
     <style>
-        :root {
-            --primary: #0f172a;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --info: #3b82f6;
-            --bg: #f8fafc;
-            --glass: rgba(255, 255, 255, 0.95);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
         body {
-            font-family: 'Outfit', sans-serif;
-            background-color: var(--bg);
-            color: var(--primary);
+            background-color: #ffffff;
+            color: #1a4d2e;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
+            padding: 3rem 1rem;
             overflow-x: hidden;
         }
 
-        /* Standalone Sidebar */
-        .sidebar {
-            width: 260px;
-            height: 100vh;
-            background: var(--primary);
-            position: fixed;
-            left: 0;
-            top: 0;
-            padding: 2rem 1.5rem;
-            color: white;
-            z-index: 1000;
+        .minimal-hub {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
         }
 
-        .sidebar-brand {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            margin-bottom: 3rem;
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
+        .header-actions {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
         }
 
-        .nav-link-custom {
-            color: rgba(255, 255, 255, 0.6);
-            padding: 0.8rem 1rem;
-            border-radius: 12px;
+        .btn-back {
+            color: #4f6f52;
             text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
             display: flex;
             align-items: center;
-            gap: 1rem;
-            transition: var(--transition);
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-back:hover {
+            color: #1a4d2e;
+            transform: translateX(-5px);
+        }
+
+        .minimal-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .minimal-header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 2.5rem;
+            letter-spacing: -0.05em;
+            color: #1a4d2e;
             margin-bottom: 0.5rem;
         }
 
-        .nav-link-custom:hover,
-        .nav-link-custom.active {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
+        .minimal-header p {
+            color: #4f6f52;
+            font-weight: 500;
+            opacity: 0.8;
+            font-size: 0.9rem;
         }
 
-        /* Main Content */
-        .main-content {
-            margin-left: 260px;
-            padding: 2.5rem;
-        }
-
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 3rem;
-        }
-
+        /* KPI GRID */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -96,14 +83,20 @@
         }
 
         .stat-card {
-            background: white;
+            background: #f8faf9;
             padding: 1.5rem;
             border-radius: 24px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border: 1px solid transparent;
+            box-shadow: 0 10px 30px rgba(26, 77, 46, 0.05);
             display: flex;
             align-items: center;
             gap: 1.2rem;
-            border: 1px solid rgba(0, 0, 0, 0.02);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(26, 77, 46, 0.1);
         }
 
         .stat-icon {
@@ -114,6 +107,28 @@
             align-items: center;
             justify-content: center;
             font-size: 1.5rem;
+            background-color: rgba(26, 77, 46, 0.1);
+            color: #1a4d2e;
+        }
+
+        .stat-icon.highlight {
+            background-color: rgba(245, 189, 2, 0.15);
+            color: #f5bd02;
+        }
+
+        .stat-card .small {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #4f6f52;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-card .h4 {
+            font-family: 'Outfit', sans-serif;
+            color: #1a4d2e;
+            font-weight: 800;
         }
 
         /* Summary Sections */
@@ -124,204 +139,200 @@
             margin-bottom: 3rem;
         }
 
-        .data-card {
-            background: white;
+        @media (max-width: 768px) {
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .glass-card {
+            background: #f8faf9;
             border-radius: 24px;
-            padding: 1.5rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            border: 1px solid transparent;
+            box-shadow: 0 10px 30px rgba(26, 77, 46, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            box-shadow: 0 15px 35px rgba(26, 77, 46, 0.08);
         }
 
         .card-title {
+            font-family: 'Outfit', sans-serif;
             font-weight: 700;
+            color: #1a4d2e;
+            font-size: 1.4rem;
             margin-bottom: 1.5rem;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            font-size: 1.1rem;
+            gap: 0.8rem;
         }
 
         /* Custom Table */
         .table-custom {
+            margin: 0;
             width: 100%;
-            border-collapse: separate;
-            border-spacing: 0 0.8rem;
         }
 
-        .table-custom th {
-            padding: 1rem;
-            font-size: 0.75rem;
+        .table-custom thead th {
+            background-color: transparent;
+            color: #4f6f52;
             font-weight: 700;
             text-transform: uppercase;
-            color: #64748b;
-            letter-spacing: 1px;
-        }
-
-        .table-custom tr td {
-            background: white;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
             padding: 1.2rem 1rem;
+            border-bottom: 2px solid rgba(26, 77, 46, 0.1);
+        }
+
+        .table-custom tbody td {
+            padding: 1.2rem 1rem;
+            vertical-align: middle;
+            color: #1a4d2e;
+            border-bottom: 1px solid rgba(26, 77, 46, 0.05);
+            font-weight: 500;
             font-size: 0.9rem;
-            border-top: 1px solid #f1f5f9;
-            border-bottom: 1px solid #f1f5f9;
         }
 
-        .table-custom tr td:first-child {
-            border-left: 1px solid #f1f5f9;
-            border-radius: 16px 0 0 16px;
+        .table-custom tbody tr {
+            transition: background-color 0.2s ease, transform 0.2s ease;
         }
 
-        .table-custom tr td:last-child {
-            border-right: 1px solid #f1f5f9;
-            border-radius: 0 16px 16px 0;
+        .table-custom tbody tr:hover {
+            background-color: #ffffff;
+            transform: scale(1.01);
+            box-shadow: 0 5px 15px rgba(26, 77, 46, 0.05);
+            border-radius: 12px;
+        }
+
+        .table-custom tbody tr:last-child td {
+            border-bottom: none;
         }
 
         .amount-badge {
             font-weight: 800;
-            color: var(--primary);
+            color: #1a4d2e;
         }
 
         .status-pill {
-            padding: 0.4rem 0.8rem;
+            padding: 0.35rem 0.8rem;
             border-radius: 8px;
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             font-weight: 700;
         }
 
-        .filter-ribbon {
-            background: white;
-            padding: 1rem;
-            border-radius: 16px;
-            display: flex;
-            gap: 0.8rem;
-            margin-bottom: 2rem;
-            overflow-x: auto;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+        .pill-pagado {
+            background-color: rgba(26, 77, 46, 0.1);
+            color: #1a4d2e;
         }
 
-        .filter-btn {
-            padding: 0.5rem 1.2rem;
-            border-radius: 10px;
-            border: 1px solid #e2e8f0;
-            background: white;
-            white-space: nowrap;
-            font-weight: 600;
-            font-size: 0.85rem;
-            transition: var(--transition);
+        .pill-pendiente {
+            background-color: rgba(245, 189, 2, 0.15);
+            color: #f5bd02;
         }
 
-        .filter-btn:hover,
-        .filter-btn.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
+        .badge-count {
+            background-color: rgba(26, 77, 46, 0.1);
+            color: #1a4d2e;
+            padding: 0.4em 0.8em;
         }
 
-        @media (max-width: 1024px) {
-            .sidebar {
-                display: none;
-            }
-
-            .main-content {
-                margin-left: 0;
-            }
+        /* Animations */
+        @keyframes revealHub {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
+
+        .reveal {
+            animation: revealHub 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            animation-fill-mode: both;
+        }
+
     </style>
 </head>
 
 <body>
 
-    <!-- STANDALONE SIDEBAR -->
-    <aside class="sidebar">
-        <div class="sidebar-brand">
-            <i class="fas fa-leaf text-success"></i>
-            <span>Salud con Amor</span>
-        </div>
-        <nav>
-            <a href="/" class="nav-link-custom">
-                <i class="fas fa-th-large"></i> Home Hub
-            </a>
-            <a href="/admin/ventas" class="nav-link-custom active">
-                <i class="fas fa-chart-pie"></i> Panel de Ventas
-            </a>
-            <a href="/producto/inventario" class="nav-link-custom">
-                <i class="fas fa-boxes-stacked"></i> Inventario
-            </a>
-            <a href="/facturas-cliente" class="nav-link-custom">
-                <i class="fas fa-file-invoice-dollar"></i> Facturación
-            </a>
-            <a href="/admin/rrhh" class="nav-link-custom">
-                <i class="fas fa-users-gear"></i> Recursos Humanos
-            </a>
-        </nav>
-    </aside>
+    <div class="header-actions">
+        <a href="/" class="btn-back"><i class="fas fa-arrow-left"></i> Volver al Hub</a>
+    </div>
 
-    <main class="main-content">
+    <main class="minimal-hub">
+
         <!-- HEADER -->
-        <div class="page-header">
-            <div>
-                <h1 class="fw-800 m-0">Reporte de Ventas</h1>
-                <p class="text-muted">Análisis detallado de transacciones y rendimiento comercial.</p>
-            </div>
-            <div th:if="${filtroActivo}" class="alert alert-info py-2 px-4 m-0 rounded-pill">
-                <i class="fas fa-filter me-2"></i> <span th:text="${filtroActivo}">Filtro Activo</span>
-            </div>
-        </div>
+        <header class="minimal-header reveal" style="animation-delay: 0.1s;">
+            <img th:src="@{/images/image.png}" alt="Logo" style="width: 70px; margin-bottom: 1.5rem;">
+            <h1>Reporte de Ventas</h1>
+            <p>Análisis detallado de transacciones y rendimiento comercial.</p>
+        </header>
 
         <!-- KPI GRID -->
-        <div class="stats-grid">
+        <div class="stats-grid reveal" style="animation-delay: 0.2s;">
             <div class="stat-card">
-                <div class="stat-icon" style="background: #ecfdf5; color: #059669;">
+                <div class="stat-icon">
                     <i class="fas fa-coins"></i>
                 </div>
                 <div>
-                    <div class="small fw-600 text-muted">Ingresos Totales</div>
-                    <div class="h4 fw-800 m-0"
+                    <div class="small">Ingresos Totales</div>
+                    <div class="h4 m-0"
                         th:text="'₡' + ${#numbers.formatDecimal(totalVentas, 1, 'COMMA', 2, 'POINT')}">₡0.00</div>
                 </div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon" style="background: #eff6ff; color: #2563eb;">
+                <div class="stat-icon highlight">
                     <i class="fas fa-receipt"></i>
                 </div>
                 <div>
-                    <div class="small fw-600 text-muted">Facturas Totales</div>
-                    <div class="h4 fw-800 m-0" th:text="${cantidadFacturas}">0</div>
+                    <div class="small">Facturas Totales</div>
+                    <div class="h4 m-0" th:text="${cantidadFacturas}">0</div>
                 </div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon" style="background: #fff7ed; color: #ea580c;">
+                <div class="stat-icon">
                     <i class="fas fa-chart-simple"></i>
                 </div>
                 <div>
-                    <div class="small fw-600 text-muted">Ticket Promedio</div>
-                    <div class="h4 fw-800 m-0"
+                    <div class="small">Ticket Promedio</div>
+                    <div class="h4 m-0"
                         th:text="'₡' + ${#numbers.formatDecimal(promedioVenta, 1, 'COMMA', 2, 'POINT')}">₡0.00</div>
                 </div>
             </div>
         </div>
 
         <!-- SUMMARY ROW -->
-        <div class="summary-grid">
+        <div class="summary-grid reveal" style="animation-delay: 0.3s;">
             <!-- Vendedores -->
-            <div class="data-card">
+            <div class="glass-card">
                 <div class="card-title">
-                    <i class="fas fa-medal text-warning"></i> Top Vendedores
+                    <i class="fas fa-medal" style="color: #f5bd02;"></i> Top Vendedores
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle">
-                        <thead class="bg-light">
+                    <table class="table-custom">
+                        <thead>
                             <tr>
-                                <th class="border-0">Vendedor</th>
-                                <th class="border-0 text-center">Facturas</th>
-                                <th class="border-0 text-end">Total</th>
+                                <th>Vendedor</th>
+                                <th class="text-center">Facturas</th>
+                                <th class="text-end">Total</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr th:each="fila : ${ventasPorVendedor}">
-                                <td class="fw-600" th:text="${fila[0]}">#4582</td>
-                                <td class="text-center"><span class="badge bg-light text-dark rounded-pill"
-                                        th:text="${fila[1]}">0</span></td>
-                                <td class="text-end fw-800"
+                                <td class="fw-bold" th:text="${fila[0]}">#4582</td>
+                                <td class="text-center">
+                                    <span class="badge rounded-pill badge-count" th:text="${fila[1]}">0</span>
+                                </td>
+                                <td class="text-end amount-badge"
                                     th:text="'₡' + ${#numbers.formatDecimal(fila[2], 1, 'COMMA', 2, 'POINT')}">₡0.00
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(ventasPorVendedor)}">
+                                <td colspan="3">
+                                    <div class="text-center py-4" style="color: #4f6f52; opacity: 0.6;">
+                                        <i class="fas fa-inbox fa-2x mb-2"></i>
+                                        <p class="mb-0" style="font-size: 0.85rem;">No hay datos de vendedores</p>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
@@ -330,22 +341,30 @@
             </div>
 
             <!-- Productos -->
-            <div class="data-card">
+            <div class="glass-card">
                 <div class="card-title">
-                    <i class="fas fa-fire text-danger"></i> Productos Estrella
+                    <i class="fas fa-fire" style="color: #ef4444;"></i> Productos Estrella
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle">
-                        <thead class="bg-light">
+                    <table class="table-custom">
+                        <thead>
                             <tr>
-                                <th class="border-0">Producto</th>
-                                <th class="border-0 text-end">Unidades</th>
+                                <th>Producto</th>
+                                <th class="text-end">Unidades</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr th:each="fila : ${productosMasVendidos}">
-                                <td class="fw-600" th:text="${fila[0]}">Nombre Producto</td>
-                                <td class="text-end fw-800 text-success" th:text="${fila[1]}">0</td>
+                                <td class="fw-bold" th:text="${fila[0]}">Nombre Producto</td>
+                                <td class="text-end amount-badge" style="color: #4f6f52;" th:text="${fila[1]}">0</td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(productosMasVendidos)}">
+                                <td colspan="2">
+                                    <div class="text-center py-4" style="color: #4f6f52; opacity: 0.6;">
+                                        <i class="fas fa-box-open fa-2x mb-2"></i>
+                                        <p class="mb-0" style="font-size: 0.85rem;">No hay productos vendidos</p>
+                                    </div>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -354,15 +373,11 @@
         </div>
 
         <!-- MAIN TABLE -->
-        <div class="filter-ribbon">
-            <a th:href="@{/admin/ventas}" class="filter-btn active">Todos</a>
-            <div th:each="estado : ${estados}" class="d-inline">
-                <a th:href="@{/admin/ventas/estado/{id}(id=${estado.idEstado})}" class="filter-btn"
-                    th:text="${estado.estado}">Activo</a>
+        <div class="glass-card mb-5 reveal" style="animation-delay: 0.4s;">
+            <div class="card-title mb-4">
+                <i class="fas fa-list"></i> Historial de Transacciones
             </div>
-        </div>
-
-        <div class="data-card border-0">
+            
             <div class="table-responsive">
                 <table class="table-custom">
                     <thead>
@@ -380,111 +395,39 @@
                     </thead>
                     <tbody>
                         <tr th:each="v : ${ventas}">
-                            <td><span class="fw-800" th:text="'#' + ${v.numeroFactura}">#001</span></td>
-                            <td class="text-muted" th:text="${v.cedulaCliente}">Cedula</td>
-                            <td class="fw-600" th:text="${v.codigoProducto}">Cod</td>
+                            <td><span class="fw-bold" style="color: #4f6f52;" th:text="'#' + ${v.numeroFactura}">#001</span></td>
+                            <td th:text="${v.cedulaCliente}">Cedula</td>
+                            <td class="fw-bold" th:text="${v.codigoProducto}">Cod</td>
                             <td th:text="${v.cantidadProducto}">1</td>
                             <td th:text="'₡' + ${v.subtotal}">₡0</td>
-                            <td class="text-muted" th:text="'₡' + ${v.iva}">₡0</td>
+                            <td style="color: #4f6f52; opacity: 0.8;" th:text="'₡' + ${v.iva}">₡0</td>
                             <td class="amount-badge"
                                 th:text="'₡' + ${#numbers.formatDecimal(v.total, 1, 'COMMA', 2, 'POINT')}">₡0.00</td>
-                            <td class="text-muted"
-                                th:text="${v.fechaEmision != null ? #dates.format(v.fechaEmision, 'dd/MM/yyyy') : '-'}">
-                                01/01/2025</td>
+                            <td>
+                                <span><i class="far fa-calendar-alt me-1" style="opacity: 0.6;"></i> <span th:text="${v.fechaEmision != null ? #dates.format(v.fechaEmision, 'dd/MM/yyyy') : '-'}">01/01/2025</span></span>
+                            </td>
                             <td>
                                 <span class="status-pill"
-                                    th:classappend="${v.idEstado == 1 ? 'bg-success-subtle text-success' : 'bg-warning-subtle text-warning'}"
-                                    th:style="${v.idEstado == 1 ? 'background: #d1fae5; color: #065f46;' : 'background: #fef3c7; color: #92400e;'}"
+                                    th:classappend="${v.idEstado == 1 ? 'pill-pagado' : 'pill-pendiente'}"
                                     th:text="${v.idEstado == 1 ? 'PAGADO' : 'PENDIENTE'}">PENDIENTE</span>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(ventas)}">
+                            <td colspan="9">
+                                <div class="text-center py-5" style="color: #4f6f52;">
+                                    <i class="fas fa-ghost fa-3x mb-3" style="opacity: 0.3;"></i>
+                                    <p>No se encontraron ventas para mostrar.</p>
+                                </div>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-
-            <div th:if="${#lists.isEmpty(ventas)}" class="text-center py-5">
-                <i class="fas fa-ghost fa-3x text-muted mb-3"></i>
-                <p class="text-muted">No se encontraron ventas con los criterios seleccionados.</p>
-            </div>
         </div>
+
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-
-</html>
-<th class="border-0">Producto</th>
-<th class="border-0 text-end">Unidades</th>
-</tr>
-</thead>
-<tbody>
-    <tr th:each="fila : ${productosMasVendidos}">
-        <td class="fw-600" th:text="${fila[0]}">Nombre Producto</td>
-        <td class="text-end fw-800 text-success" th:text="${fila[1]}">0</td>
-    </tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-
-<!-- MAIN TABLE -->
-<div class="filter-ribbon">
-    <a th:href="@{/admin/ventas}" class="filter-btn active">Todos</a>
-    <div th:each="estado : ${estados}" class="d-inline">
-        <a th:href="@{/admin/ventas/estado/{id}(id=${estado.idEstado})}" class="filter-btn"
-            th:text="${estado.estado}">Activo</a>
-    </div>
-</div>
-
-<div class="data-card border-0">
-    <div class="table-responsive">
-        <table class="table-custom">
-            <thead>
-                <tr>
-                    <th>Factura</th>
-                    <th>Cliente</th>
-                    <th>Producto</th>
-                    <th>Cant.</th>
-                    <th>Subtotal</th>
-                    <th>IVA</th>
-                    <th>Total</th>
-                    <th>Fecha</th>
-                    <th>Estado</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="v : ${ventas}">
-                    <td><span class="fw-800" th:text="'#' + ${v.numeroFactura}">#001</span></td>
-                    <td class="text-muted" th:text="${v.cedulaCliente}">Cedula</td>
-                    <td class="fw-600" th:text="${v.codigoProducto}">Cod</td>
-                    <td th:text="${v.cantidadProducto}">1</td>
-                    <td th:text="'₡' + ${v.subtotal}">₡0</td>
-                    <td class="text-muted" th:text="'₡' + ${v.iva}">₡0</td>
-                    <td class="amount-badge" th:text="'₡' + ${#numbers.formatDecimal(v.total, 1, 'COMMA', 2, 'POINT')}">
-                        ₡0.00</td>
-                    <td class="text-muted"
-                        th:text="${v.fechaEmision != null ? #dates.format(v.fechaEmision, 'dd/MM/yyyy') : '-'}">
-                        01/01/2025</td>
-                    <td>
-                        <span class="status-pill"
-                            th:classappend="${v.idEstado == 1 ? 'bg-success-subtle text-success' : 'bg-warning-subtle text-warning'}"
-                            th:style="${v.idEstado == 1 ? 'background: #d1fae5; color: #065f46;' : 'background: #fef3c7; color: #92400e;'}"
-                            th:text="${v.idEstado == 1 ? 'PAGADO' : 'PENDIENTE'}">PENDIENTE</span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <div th:if="${#lists.isEmpty(ventas)}" class="text-center py-5">
-        <i class="fas fa-ghost fa-3x text-muted mb-3"></i>
-        <p class="text-muted">No se encontraron ventas con los criterios seleccionados.</p>
-    </div>
-</div>
-</main>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

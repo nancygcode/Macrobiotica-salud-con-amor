@@ -6,39 +6,76 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Facturas Clientes - Salud con Amor</title>
 
-    <!-- Bootstrap and Fonts for standalone functionality -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Global CSS -->
+    <link rel="stylesheet" th:href="@{/css/macrobiotica.css}">
 
     <style>
-        :root {
-            --primary-bg: #f8fafc;
-            --card-bg: #ffffff;
-            --accent-green: #3b82f6;
-            --accent-green-hover: #2563eb;
-            --text-main: #1f2937;
-            --text-muted: #6b7280;
-            --border-color: #e5e7eb;
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
-
         body {
-            font-family: 'Outfit', sans-serif;
-            background-color: var(--primary-bg);
-            color: var(--text-main);
-            margin: 0;
-            padding: 2rem 0;
+            background-color: #ffffff;
+            color: #1a4d2e;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             min-height: 100vh;
+            padding: 3rem 1rem;
         }
 
-        .premium-container {
-            max-width: 1280px;
+        .minimal-hub {
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 0 2rem;
+            width: 100%;
+        }
+
+        .header-actions {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+        }
+
+        .btn-back {
+            color: #4f6f52;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-back:hover {
+            color: #1a4d2e;
+            transform: translateX(-5px);
+        }
+
+        .minimal-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .minimal-header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 2.8rem;
+            letter-spacing: -0.05em;
+            color: #1a4d2e;
+            margin-bottom: 0.5rem;
+        }
+
+        .minimal-header p {
+            color: #4f6f52;
+            font-weight: 500;
+            opacity: 0.6;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-size: 0.75rem;
         }
 
         .header-section {
@@ -46,48 +83,44 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 2rem;
-            animation: fadeInDown 0.6s ease-out;
         }
 
         .header-section h2 {
+            font-family: 'Outfit', sans-serif;
             font-weight: 700;
-            font-size: 2.2rem;
-            color: var(--text-main);
+            font-size: 1.8rem;
+            color: #1a4d2e;
             margin: 0;
-            background: linear-gradient(135deg, #1f2937, #2563eb);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
         .btn-premium {
-            background: linear-gradient(135deg, var(--accent-green), #60a5fa);
-            color: white;
+            background-color: #1a4d2e;
+            color: #ffffff;
             border: none;
             padding: 0.75rem 1.5rem;
-            border-radius: 9999px;
+            border-radius: 12px;
             font-weight: 600;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.39);
+            transition: all 0.3s ease;
         }
 
         .btn-premium:hover {
+            background-color: #f5bd02;
+            color: #1a4d2e;
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.23);
-            color: white;
-            background: linear-gradient(135deg, var(--accent-green-hover), var(--accent-green));
+            box-shadow: 0 10px 20px rgba(26, 77, 46, 0.15);
         }
 
         .glass-card {
-            background: var(--card-bg);
-            border-radius: 20px;
-            box-shadow: var(--shadow-lg);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            overflow: hidden;
-            animation: fadeIn 0.8s ease-out;
+            background: #f8faf9;
+            border-radius: 24px;
+            padding: 2rem;
+            border: 1px solid transparent;
+            box-shadow: 0 10px 30px rgba(26, 77, 46, 0.05);
+            transition: all 0.3s ease;
         }
 
         .custom-table {
@@ -96,26 +129,33 @@
         }
 
         .custom-table thead th {
-            background-color: #f3f4f6;
-            color: var(--text-muted);
-            font-weight: 600;
+            background-color: transparent;
+            color: #4f6f52;
+            font-weight: 700;
             text-transform: uppercase;
-            font-size: 0.85rem;
-            letter-spacing: 0.05em;
-            padding: 1.2rem 1.5rem;
-            border-bottom: 2px solid var(--border-color);
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            padding: 1.2rem 1rem;
+            border-bottom: 2px solid rgba(26, 77, 46, 0.1);
         }
 
         .custom-table tbody td {
-            padding: 1.2rem 1.5rem;
+            padding: 1.2rem 1rem;
             vertical-align: middle;
-            color: var(--text-main);
-            border-bottom: 1px solid var(--border-color);
-            transition: background-color 0.2s;
+            color: #1a4d2e;
+            border-bottom: 1px solid rgba(26, 77, 46, 0.05);
+            font-weight: 500;
         }
 
-        .custom-table tbody tr:hover td {
-            background-color: #f9fafb;
+        .custom-table tbody tr {
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .custom-table tbody tr:hover {
+            background-color: #ffffff;
+            transform: scale(1.01);
+            box-shadow: 0 5px 15px rgba(26, 77, 46, 0.05);
+            border-radius: 12px;
         }
 
         .custom-table tbody tr:last-child td {
@@ -124,64 +164,67 @@
 
         .status-badge {
             padding: 0.35rem 0.8rem;
-            border-radius: 9999px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            background-color: #eff6ff;
-            color: #1e40af;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            background-color: rgba(245, 189, 2, 0.15);
+            color: #1a4d2e;
+        }
+
+        .btn-action, .btn-danger-action {
+            width: 38px;
+            height: 38px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            border: none;
         }
 
         .btn-action {
-            background-color: white;
-            color: #3b82f6;
-            border: 1px solid #bfdbfe;
-            border-radius: 8px;
-            padding: 0.4rem 0.8rem;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: all 0.2s;
+            background-color: rgba(26, 77, 46, 0.1);
+            color: #1a4d2e;
         }
 
         .btn-action:hover {
-            background-color: #eff6ff;
-            color: #2563eb;
-            box-shadow: var(--shadow-sm);
+            background-color: #1a4d2e;
+            color: #ffffff;
         }
 
         .btn-danger-action {
-            background-color: white;
+            background-color: rgba(239, 68, 68, 0.1);
             color: #ef4444;
-            border: 1px solid #fecaca;
-            border-radius: 8px;
-            padding: 0.4rem 0.8rem;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: all 0.2s;
+            margin-left: 0.5rem;
         }
 
         .btn-danger-action:hover {
-            background-color: #fef2f2;
-            color: #dc2626;
-            box-shadow: var(--shadow-sm);
+            background-color: #ef4444;
+            color: #ffffff;
         }
 
         /* Modal Styling */
         .modal-content {
-            border-radius: 20px;
+            border-radius: 24px;
             border: none;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            overflow: hidden;
+            box-shadow: 0 40px 80px rgba(26, 77, 46, 0.15);
         }
 
         .modal-header {
-            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
-            border-bottom: 1px solid var(--border-color);
+            background: #ffffff;
+            border-bottom: 1px solid rgba(26, 77, 46, 0.1);
             padding: 1.5rem 2rem;
+            border-top-left-radius: 24px;
+            border-top-right-radius: 24px;
         }
 
         .modal-title {
+            font-family: 'Outfit', sans-serif;
             font-weight: 700;
-            color: #0f172a;
+            color: #1a4d2e;
+            font-size: 1.4rem;
         }
 
         .btn-close:focus {
@@ -190,102 +233,123 @@
 
         .modal-body {
             padding: 2rem;
-            background-color: white;
+            background-color: #f8faf9;
         }
 
         .form-label {
-            font-weight: 500;
-            color: var(--text-main);
-            font-size: 0.95rem;
+            font-weight: 600;
+            color: #4f6f52;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
             margin-bottom: 0.5rem;
         }
 
         .form-control,
         .form-select {
-            border-radius: 10px;
-            border: 1px solid #d1d5db;
-            padding: 0.6rem 1rem;
+            border-radius: 12px;
+            border: 1px solid rgba(26, 77, 46, 0.2);
+            padding: 0.75rem 1rem;
             font-size: 0.95rem;
-            transition: all 0.2s;
-            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+            background-color: #ffffff;
+            color: #1a4d2e;
         }
 
         .form-control:focus,
         .form-select:focus {
-            border-color: var(--accent-green);
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+            border-color: #1a4d2e;
+            box-shadow: 0 0 0 4px rgba(26, 77, 46, 0.08);
+            outline: none;
         }
 
         .modal-footer {
-            border-top: 1px solid var(--border-color);
+            border-top: 1px solid rgba(26, 77, 46, 0.1);
             padding: 1.5rem 2rem;
-            background-color: #f8fafc;
+            background-color: #ffffff;
+            border-bottom-left-radius: 24px;
+            border-bottom-right-radius: 24px;
         }
 
         .btn-outline-secondary {
-            border-radius: 10px;
-            font-weight: 500;
+            border-radius: 12px;
+            font-weight: 600;
             padding: 0.6rem 1.2rem;
+            color: #4f6f52;
+            border-color: rgba(26, 77, 46, 0.2);
+        }
+
+        .btn-outline-secondary:hover {
+            background-color: rgba(26, 77, 46, 0.05);
+            border-color: rgba(26, 77, 46, 0.3);
+            color: #1a4d2e;
         }
 
         /* Animations */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(15px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        @keyframes revealHub {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-15px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .reveal {
+            animation: revealHub 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            animation-fill-mode: both;
         }
 
         /* Empty State */
         .empty-state {
             padding: 4rem 2rem;
             text-align: center;
-            color: var(--text-muted);
         }
 
         .empty-icon {
             font-size: 3rem;
-            color: #d1d5db;
+            color: rgba(26, 77, 46, 0.2);
             margin-bottom: 1rem;
         }
+
+        .empty-state h4 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            color: #1a4d2e;
+        }
+
+        .empty-state p {
+            color: #4f6f52;
+        }
+
     </style>
 </head>
 
 <body>
 
-    <main class="premium-container">
+    <div class="header-actions">
+        <a href="/" class="btn-back"><i class="fas fa-arrow-left"></i> Volver al Hub</a>
+    </div>
 
-        <div th:if="${mensaje}" class="alert alert-success alert-dismissible fade show" role="alert">
-            <span th:text="${mensaje}"></span>
+    <main class="minimal-hub">
+
+        <header class="minimal-header reveal" style="animation-delay: 0.1s;">
+            <img th:src="@{/images/image.png}" alt="Logo" style="width: 70px; margin-bottom: 2rem;">
+            <h1>Sistema de Facturación</h1>
+            <p>Registro y Control de Ventas a Clientes</p>
+        </header>
+
+        <div th:if="${mensaje}" class="alert alert-success alert-dismissible fade show reveal" role="alert" style="border-radius: 16px; background-color: rgba(26, 77, 46, 0.1); border: 1px solid rgba(26, 77, 46, 0.2); color: #1a4d2e; font-weight: 600;">
+            <i class="fas fa-check-circle me-2"></i> <span th:text="${mensaje}"></span>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
 
-        <div class="header-section">
-            <h2><i class="fas fa-file-invoice me-2" style="color: var(--accent-green);"></i> Facturas Clientes</h2>
+        <div class="header-section reveal" style="animation-delay: 0.2s;">
+            <h2><i class="fas fa-file-invoice me-2" style="color: #f5bd02;"></i> Facturas Clientes</h2>
 
             <button class="btn btn-premium" onclick="abrirModalNuevo()">
                 <i class="fas fa-plus"></i> Nueva Factura
             </button>
         </div>
 
-        <div class="glass-card">
+        <div class="glass-card reveal" style="animation-delay: 0.3s;">
             <div class="table-responsive">
                 <table class="table custom-table">
                     <thead>
@@ -301,32 +365,27 @@
                     <tbody>
                         <tr th:each="f : ${facturas}">
                             <td>
-                                <span class="fw-bold" style="color: #4b5563;" th:text="${f.numeroFactura}"></span>
+                                <span class="fw-bold" th:text="${f.numeroFactura}"></span>
                             </td>
                             <td>
                                 <span th:text="${f.cedulaCliente}"></span>
                             </td>
                             <td>
-                                <div><i class="far fa-calendar-alt text-muted me-1"></i> <span
+                                <div><i class="far fa-calendar-alt me-1" style="opacity: 0.6;"></i> <span
                                         th:text="${#calendars.format(f.fechaEmision, 'dd/MM/yyyy')}"></span></div>
                             </td>
                             <td>
-                                <span class="fw-bold" style="color: var(--accent-green);"
+                                <span class="fw-bold" style="color: #1a4d2e;"
                                     th:text="'₡' + ${f.total != null ? #numbers.formatDecimal(f.total, 1, 2) : '0.00'}"></span>
                             </td>
                             <td>
                                 <span class="status-badge" th:text="${f.idEstado}"></span>
                             </td>
                             <td class="text-center">
-                                <button class="btn btn-action me-1"
+                                <button class="btn btn-action"
                                     th:onclick="'abrirModalEditar(' + ${f.numeroFactura} + ')'" title="Editar">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <a th:href="@{/facturas-cliente/eliminar/{id}(id=${f.numeroFactura})}"
-                                    class="btn btn-danger-action" title="Eliminar"
-                                    onclick="return confirm('¿Está seguro de eliminar esta factura?');">
-                                    <i class="fas fa-trash-alt"></i>
-                                </a>
                             </td>
                         </tr>
                         <tr th:if="${facturas.empty}">
@@ -351,7 +410,7 @@
                 <form th:action="@{/facturas-cliente/guardar}" th:object="${factura}" method="post">
                     <div class="modal-header">
                         <h5 class="modal-title" id="facturaModalLabel"><i
-                                class="fas fa-file-invoice text-primary me-2"></i> Factura de Cliente</h5>
+                                class="fas fa-file-invoice text-warning me-2"></i> Factura de Cliente</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
@@ -362,21 +421,21 @@
                         <div class="row g-4">
                             <div class="col-md-6">
                                 <label for="cedulaCliente" class="form-label"><i
-                                        class="fas fa-user-tag text-muted me-1"></i> Cédula Cliente</label>
+                                        class="fas fa-user-tag me-1 text-muted"></i> Cédula Cliente</label>
                                 <input type="number" class="form-control" th:field="*{cedulaCliente}" id="cedulaCliente"
                                     required>
                             </div>
 
                             <div class="col-md-6">
                                 <label for="cedulaVendedor" class="form-label"><i
-                                        class="fas fa-user-tie text-muted me-1"></i> Cédula Vendedor</label>
+                                        class="fas fa-user-tie me-1 text-muted"></i> Cédula Vendedor</label>
                                 <input type="number" class="form-control" th:field="*{cedulaVendedor}"
                                     id="cedulaVendedor" required>
                             </div>
 
                             <div class="col-md-6">
                                 <label for="codigoProducto" class="form-label"><i
-                                        class="fas fa-box text-muted me-1"></i> Código Producto</label>
+                                        class="fas fa-box me-1 text-muted"></i> Código Producto</label>
                                 <input type="number" class="form-control" th:field="*{codigoProducto}"
                                     id="codigoProducto" required>
                             </div>
@@ -401,7 +460,7 @@
                             <div class="col-md-4">
                                 <label for="total" class="form-label">Total (₡)</label>
                                 <div class="input-group">
-                                    <span class="input-group-text bg-light">₡</span>
+                                    <span class="input-group-text" style="background-color: #ffffff; border-color: rgba(26, 77, 46, 0.2); color: #1a4d2e; font-weight: 600;">₡</span>
                                     <input type="number" step="0.01" class="form-control" th:field="*{total}"
                                         id="total">
                                 </div>
@@ -428,7 +487,7 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-secondary"
                             data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-premium" style="border-radius: 10px;">
+                        <button type="submit" class="btn btn-premium">
                             <i class="fas fa-save"></i> Guardar Factura
                         </button>
                     </div>
@@ -468,7 +527,7 @@
         });
 
         function abrirModalNuevo() {
-            document.getElementById('facturaModalLabel').innerHTML = '<i class="fas fa-file-invoice text-primary me-2"></i> Agregar Factura de Cliente';
+            document.getElementById('facturaModalLabel').innerHTML = '<i class="fas fa-file-invoice text-warning me-2"></i> Agregar Factura de Cliente';
 
             // Limpiar formulario
             document.getElementById('numeroFactura').value = '';
@@ -487,7 +546,7 @@
         }
 
         function abrirModalEditar(id) {
-            document.getElementById('facturaModalLabel').innerHTML = '<i class="fas fa-edit text-primary me-2"></i> Editar Factura de Cliente';
+            document.getElementById('facturaModalLabel').innerHTML = '<i class="fas fa-edit text-warning me-2"></i> Editar Factura de Cliente';
 
             // Fecth data via AJAX
             fetch('/facturas-cliente/obtener/' + id)
