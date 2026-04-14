@@ -4,243 +4,660 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RRHH / Asistencia - Admin | Salud con Amor</title>
+    <title>Talento Humano | Salud con Amor</title>
 
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        crossorigin="anonymous">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- CSS propio -->
-    <link rel="stylesheet" th:href="@{/css/admin-rrhh.css}">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #1a4d2e;
+            --secondary: #4f6f52;
+            --accent: #f5bd02;
+            --bg-light: #f8faf9;
+            --white: #ffffff;
+            --danger: #ef4444;
+            --success: #10b981;
+            --info: #3b82f6;
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            background-color: var(--white);
+            color: var(--primary);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+        }
+
+        /* Side Navigation */
+        .side-nav {
+            width: 280px;
+            background: var(--bg-light);
+            border-right: 1px solid rgba(26, 77, 46, 0.05);
+            height: 100vh;
+            position: fixed;
+            padding: 2.5rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 3.5rem;
+            text-decoration: none;
+        }
+
+        .nav-brand img {
+            width: 40px;
+        }
+
+        .nav-brand span {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            color: var(--primary);
+            font-size: 1.25rem;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-link-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.25rem;
+            border-radius: 16px;
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+
+        .nav-link-item i {
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+
+        .nav-link-item:hover {
+            background: var(--white);
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .nav-link-item.active {
+            background: var(--primary);
+            color: var(--white);
+            box-shadow: 0 10px 20px rgba(26, 77, 46, 0.15);
+        }
+
+        .nav-link-item.active i {
+            color: var(--accent);
+        }
+
+        /* Content Area */
+        .content-area {
+            margin-left: 280px;
+            flex-grow: 1;
+            padding: 3rem 4rem;
+            background: var(--white);
+            width: calc(100% - 280px);
+            animation: revealHub 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .page-header {
+            margin-bottom: 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .header-info h1 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 2.5rem;
+            letter-spacing: -0.04em;
+            margin-bottom: 0.5rem;
+        }
+
+        .header-info p {
+            color: var(--secondary);
+            font-weight: 500;
+            opacity: 0.6;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 0.75rem;
+        }
+
+        /* KPI Section */
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3.5rem;
+        }
+
+        .kpi-box {
+            background: var(--bg-light);
+            border-radius: 24px;
+            padding: 2rem;
+            border: 1px solid transparent;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .kpi-box:hover {
+            background: var(--white);
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(26, 77, 46, 0.05);
+        }
+
+        .kpi-icon {
+            font-size: 1.5rem;
+            margin-bottom: 1.25rem;
+            width: 44px;
+            height: 44px;
+            background: var(--white);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+        }
+
+        .kpi-value {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 1.85rem;
+            display: block;
+            margin-bottom: 0.25rem;
+            color: var(--primary);
+        }
+
+        .kpi-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            opacity: 0.6;
+        }
+
+        /* Cards and Tables */
+        .minimal-card {
+            background: var(--bg-light);
+            border-radius: 32px;
+            padding: 2rem;
+            border: 1px solid rgba(26, 77, 46, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .card-title {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .custom-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 0.5rem;
+        }
+
+        .custom-table th {
+            padding: 0.75rem 1.25rem;
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--secondary);
+            opacity: 0.5;
+            border: none;
+        }
+
+        .custom-table td {
+            padding: 1rem 1.25rem;
+            background: var(--white);
+            border: none;
+            vertical-align: middle;
+            font-size: 0.9rem;
+        }
+
+        .custom-table td:first-child {
+            border-radius: 16px 0 0 16px;
+        }
+
+        .custom-table td:last-child {
+            border-radius: 0 16px 16px 0;
+        }
+
+        .custom-table tbody tr {
+            transition: var(--transition);
+        }
+
+        .custom-table tbody tr:hover td {
+            background: #f0f4f2;
+        }
+
+        /* Badges */
+        .badge-pill {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+        }
+
+        .badge-active {
+            background: #f0fdf4;
+            color: #166534;
+        }
+
+        .badge-inactive {
+            background: #fef2f2;
+            color: #991b1b;
+        }
+
+        .badge-count {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-filter-sm {
+            background: var(--bg-light);
+            color: var(--primary);
+            border: none;
+            padding: 0.4rem 1rem;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .btn-filter-sm:hover {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        /* Filter bar */
+        .filter-toolbar {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: var(--white);
+            border-radius: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-label {
+            font-weight: 700;
+            font-size: 0.75rem;
+            color: var(--secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .tag-filter {
+            background: var(--bg-light);
+            color: var(--secondary);
+            padding: 0.5rem 1rem;
+            border-radius: 99px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            border: 1px solid transparent;
+        }
+
+        .tag-filter:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: var(--white);
+        }
+
+        .tag-reset {
+            color: var(--danger);
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-decoration: none;
+            margin-left: auto;
+        }
+
+        .btn-logout {
+            margin-top: auto;
+            background: transparent;
+            border: none;
+            color: var(--danger);
+            font-weight: 700;
+            font-size: 0.8rem;
+            opacity: 0.5;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            text-align: left;
+            padding: 1rem 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn-logout:hover {
+            opacity: 1;
+            transform: translateX(5px);
+        }
+
+        @keyframes revealHub {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .side-nav {
+                width: 80px;
+                padding: 2rem 1rem;
+            }
+
+            .nav-brand span,
+            .nav-link-item span,
+            .btn-logout span {
+                display: none;
+            }
+
+            .content-area {
+                margin-left: 80px;
+                padding: 2rem;
+                width: calc(100% - 80px);
+            }
+        }
+
+        .alert-filter {
+            background: #eef2ff;
+            border: 1px solid #e0e7ff;
+            color: #3730a3;
+            border-radius: 16px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
 
 <body>
 
-    <main class="rrhh-container">
+    <!-- SIDE NAVIGATION -->
+    <nav class="side-nav">
+        <a href="/" class="nav-brand">
+            <img th:src="@{/images/image.png}" alt="Logo">
+            <span>Macrobiótica</span>
+        </a>
 
-        <!-- ══ ENCABEZADO ══ -->
-        <div class="rrhh-header">
-            <h2>
-                <i class="fas fa-users me-2" style="color: var(--accent-green);"></i>
-                Recursos Humanos &amp; Asistencia
-            </h2>
-            <a th:href="@{/}" class="btn btn-outline-secondary btn-sm">
-                <i class="fas fa-arrow-left me-1"></i> Volver al inicio
-            </a>
-        </div>
+        <ul class="nav-list">
+            <li class="nav-item">
+                <a href="/" class="nav-link-item">
+                    <i class="fas fa-th-large"></i>
+                    <span>Panel General</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/producto/inventario" class="nav-link-item">
+                    <i class="fas fa-boxes-stacked"></i>
+                    <span>Inventario</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/provedores" class="nav-link-item">
+                    <i class="fas fa-truck-field"></i>
+                    <span>Proveedores</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/admin/ventas" class="nav-link-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Indicadores</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/admin/rrhh" class="nav-link-item active">
+                    <i class="fas fa-users-gear"></i>
+                    <span>Talento Humano</span>
+                </a>
+            </li>
+        </ul>
+
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="btn-logout">
+                <i class="fas fa-power-off"></i>
+                <span>Cerrar Sesión</span>
+            </button>
+        </form>
+    </nav>
+
+    <!-- CONTENT AREA -->
+    <main class="content-area">
+
+        <header class="page-header">
+            <div class="header-info">
+                <h1>Gestión de Talento Humano</h1>
+                <p>Monitoreo de asistencia y administración de equipo</p>
+            </div>
+        </header>
 
         <!-- Alerta de filtro activo -->
         <div th:if="${filtroActivo}" class="alert-filter">
-            <i class="fas fa-filter me-2"></i>
-            Mostrando: <strong th:text="${filtroActivo}">—</strong>
-            <a th:href="@{/admin/rrhh}" class="btn-reset ms-3">
-                <i class="fas fa-rotate-left me-1"></i> Ver todos
+            <i class="fas fa-filter me-2 opacity-50"></i>
+            Vista filtrada por: <strong class="ms-1" th:text="${filtroActivo}">—</strong>
+            <a th:href="@{/admin/rrhh}" class="ms-auto text-decoration-none fw-800"
+                style="color: inherit; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em;">
+                <i class="fas fa-rotate-left me-1"></i> Restablecer
             </a>
         </div>
 
         <!-- ══ KPIs ══ -->
-        <div class="kpi-grid">
-            <div class="kpi-card">
-                <div class="kpi-icon">👥</div>
-                <div class="kpi-label">Empleados Activos</div>
-                <div class="kpi-value" th:text="${totalEmpleados}">0</div>
+        <div class="kpi-row">
+            <div class="kpi-box">
+                <div class="kpi-icon"><i class="fas fa-users"></i></div>
+                <span class="kpi-label">Empleados Activos</span>
+                <span class="kpi-value" th:text="${totalEmpleados}">0</span>
             </div>
-            <div class="kpi-card kpi-blue">
-                <div class="kpi-icon">📋</div>
-                <div class="kpi-label">Registros de Asistencia</div>
-                <div class="kpi-value" th:text="${totalRegistros}">0</div>
+            <div class="kpi-box">
+                <div class="kpi-icon" style="color: var(--info);"><i class="fas fa-calendar-check"></i></div>
+                <span class="kpi-label">Registros de Hoy</span>
+                <span class="kpi-value" th:text="${totalRegistros}">0</span>
             </div>
-            <div class="kpi-card kpi-amber">
-                <div class="kpi-icon">💵</div>
-                <div class="kpi-label">Total Nómina</div>
-                <div class="kpi-value" th:text="'₡' + ${#numbers.formatDecimal(totalNomina, 1, 'COMMA', 2, 'POINT')}">
-                    ₡0.00
-                </div>
+            <div class="kpi-box">
+                <div class="kpi-icon" style="color: var(--success);"><i class="fas fa-money-bill-wave"></i></div>
+                <span class="kpi-label">Total Nómina Estimada</span>
+                <span class="kpi-value"
+                    th:text="'₡' + ${#numbers.formatDecimal(totalNomina, 1, 'COMMA', 0, 'POINT')}">₡0</span>
             </div>
-            <div class="kpi-card kpi-purple">
-                <div class="kpi-icon">📊</div>
-                <div class="kpi-label">Salario Promedio</div>
-                <div class="kpi-value"
-                    th:text="'₡' + ${#numbers.formatDecimal(promedioSalario, 1, 'COMMA', 2, 'POINT')}">
-                    ₡0.00
-                </div>
+            <div class="kpi-box">
+                <div class="kpi-icon" style="color: var(--accent);"><i class="fas fa-chart-pie"></i></div>
+                <span class="kpi-label">Promedio Salarial</span>
+                <span class="kpi-value"
+                    th:text="'₡' + ${#numbers.formatDecimal(promedioSalario, 1, 'COMMA', 0, 'POINT')}">₡0</span>
             </div>
         </div>
 
-        <!-- ══ RESÚMENES ══ -->
-        <div class="resumen-grid">
-
+        <div class="row g-4 mb-4">
             <!-- Asistencias por empleado -->
-            <div class="glass-card">
-                <div class="glass-card-header">
-                    <h3><i class="fas fa-id-badge me-2 text-success"></i> Registros por Empleado</h3>
-                </div>
-                <div class="table-responsive">
-                    <table class="table custom-table">
-                        <thead>
-                            <tr>
-                                <th>Cédula</th>
-                                <th>N° Registros</th>
-                                <th>Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr th:each="fila : ${registrosPorEmpleado}">
-                                <td>
-                                    <i class="fas fa-id-card text-muted me-1"></i>
-                                    <span th:text="${fila[0]}">-</span>
-                                </td>
-                                <td>
-                                    <span class="badge-count" th:text="${fila[1]}">0</span>
-                                </td>
-                                <td>
-                                    <a th:href="@{/admin/rrhh/empleado/{c}(c=${fila[0]})}" class="btn-filter-sm">
-                                        <i class="fas fa-search me-1"></i> Ver
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr th:if="${registrosPorEmpleado.empty}">
-                                <td colspan="3">
-                                    <div class="empty-state">
-                                        <div class="empty-icon"><i class="fas fa-calendar-xmark"></i></div>
-                                        <p>Sin registros de asistencia</p>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+            <div class="col-lg-5">
+                <div class="minimal-card h-100 mb-0">
+                    <div class="card-title">
+                        <span><i class="fas fa-id-badge me-2 opacity-50"></i> Actividad por Colaborador</span>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>Identificación</th>
+                                    <th class="text-center">Registros</th>
+                                    <th class="text-end">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="fila : ${registrosPorEmpleado}">
+                                    <td class="fw-700" th:text="${fila[0]}">-</td>
+                                    <td class="text-center">
+                                        <span class="badge-pill badge-count" th:text="${fila[1]}">0</span>
+                                    </td>
+                                    <td class="text-end">
+                                        <a th:href="@{/admin/rrhh/empleado/{c}(c=${fila[0]})}" class="btn-filter-sm">
+                                            <i class="fas fa-search"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
             <!-- Lista de empleados -->
-            <div class="glass-card">
-                <div class="glass-card-header">
-                    <h3><i class="fas fa-user-tie me-2 text-success"></i> Empleados</h3>
-                    <span class="badge bg-success" th:text="${totalEmpleados} + ' empleados'">0 empleados</span>
-                </div>
-                <div class="table-responsive">
-                    <table class="table custom-table">
-                        <thead>
-                            <tr>
-                                <th>Cédula</th>
-                                <th>Nombre</th>
-                                <th>Depto.</th>
-                                <th>Estado</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr th:each="emp : ${empleados}">
-                                <td th:text="${emp.cedula}">-</td>
-                                <td>
-                                    <span th:text="${emp.nombre + ' ' + (emp.apellidoPaterno ?: '')}">-</span>
-                                </td>
-                                <td>
-                                    <span class="badge-depto" th:text="${emp.idDepartamento}">-</span>
-                                </td>
-                                <td>
-                                    <span class="estado-badge"
-                                        th:classappend="${emp.idEstado == 1} ? 'activo' : 'inactivo'"
-                                        th:text="${emp.idEstado == 1} ? 'Activo' : 'Inactivo'">
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr th:if="${empleados.empty}">
-                                <td colspan="4">
-                                    <div class="empty-state">
-                                        <div class="empty-icon"><i class="fas fa-users-slash"></i></div>
-                                        <p>No hay empleados registrados</p>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+            <div class="col-lg-7">
+                <div class="minimal-card h-100 mb-0">
+                    <div class="card-title">
+                        <span><i class="fas fa-user-tie me-2 opacity-50"></i> Directorio de Equipo</span>
+                        <span class="fw-800 opacity-40" style="font-size: 0.7rem;"
+                            th:text="${totalEmpleados} + ' TOTALES'"></span>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>Cédula</th>
+                                    <th>Nombre Completo</th>
+                                    <th>Departamento</th>
+                                    <th class="text-end">Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="emp : ${empleados}">
+                                    <td class="fw-800 opacity-60" th:text="${emp.cedula}">-</td>
+                                    <td class="fw-700" th:text="${emp.nombre + ' ' + (emp.apellidoPaterno ?: '')}">-
+                                    </td>
+                                    <td>
+                                        <span class="badge-pill" style="background: #f1f5f9; color: #475569;"
+                                            th:text="${emp.idDepartamento}">-</span>
+                                    </td>
+                                    <td class="text-end">
+                                        <span class="badge-pill"
+                                            th:classappend="${emp.idEstado == 1} ? 'badge-active' : 'badge-inactive'"
+                                            th:text="${emp.idEstado == 1} ? 'ACTIVO' : 'INACTIVO'"></span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-
         </div>
 
         <!-- ══ TABLA PRINCIPAL DE ASISTENCIA ══ -->
-        <div class="glass-card">
-            <div class="glass-card-header">
-                <h3><i class="fas fa-calendar-check me-2 text-success"></i> Registros de Asistencia</h3>
-                <span class="badge bg-success" th:text="${asistencias.size()} + ' registros'">0 registros</span>
+        <div class="minimal-card">
+            <div class="card-title">
+                <span><i class="fas fa-calendar-alt me-2 opacity-50"></i> Historial de Asistencias</span>
             </div>
 
-            <!-- Filtros rápidos por tipo -->
-            <div class="filter-bar">
-                <label><i class="fas fa-filter me-1"></i> Filtrar por tipo:</label>
-                <div th:each="tipo : ${tipos}">
-                    <a th:href="@{/admin/rrhh/tipo/{id}(id=${tipo.idTipoAsistencia})}" class="btn-filter"
-                        th:text="${tipo.nombre}">
-                        Tipo
-                    </a>
-                </div>
-                <a th:href="@{/admin/rrhh}" class="btn-reset">
-                    <i class="fas fa-rotate-left me-1"></i> Ver todos
-                </a>
+            <!-- Filtros rápidos -->
+            <div class="filter-toolbar">
+                <span class="filter-label">Tipos:</span>
+                <a th:each="tipo : ${tipos}" th:href="@{/admin/rrhh/tipo/{id}(id=${tipo.idTipoAsistencia})}"
+                    class="tag-filter" th:text="${tipo.nombre}">Tipo</a>
+                <a th:href="@{/admin/rrhh}" class="tag-reset"><i class="fas fa-rotate-left me-1"></i> Ver todos</a>
             </div>
 
-            <!-- Tabla -->
             <div class="table-responsive">
-                <table class="table custom-table">
+                <table class="custom-table">
                     <thead>
                         <tr>
-                            <th># ID</th>
-                            <th>Cédula</th>
+                            <th>ID</th>
+                            <th>Colaborador</th>
                             <th>Entrada</th>
                             <th>Salida</th>
-                            <th>Horas trabajadas</th>
-                            <th>Tipo</th>
-                            <th>Estado</th>
+                            <th>Duración</th>
+                            <th class="text-center">Tipo</th>
+                            <th class="text-end">Estado</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr th:each="a : ${asistencias}">
-                            <td>
-                                <span class="fw-bold" style="color:#4b5563;" th:text="${a.idAsistencia}">-</span>
-                            </td>
-                            <td>
-                                <i class="fas fa-user text-muted me-1"></i>
+                            <td class="fw-800 opacity-40" th:text="${a.idAsistencia}">-</td>
+                            <td class="fw-700">
+                                <i class="fas fa-user-circle me-1 opacity-20"></i>
                                 <span th:text="${a.cedula}">-</span>
                             </td>
                             <td>
-                                <i class="far fa-clock text-muted me-1"></i>
-                                <span
+                                <span class="opacity-70"
                                     th:text="${a.entrada != null ? #dates.format(a.entrada, 'dd/MM/yyyy HH:mm') : '-'}">-</span>
                             </td>
                             <td>
-                                <i class="far fa-clock text-muted me-1"></i>
-                                <span
+                                <span class="opacity-70"
                                     th:text="${a.salida != null ? #dates.format(a.salida, 'dd/MM/yyyy HH:mm') : '-'}">-</span>
                             </td>
-                            <td>
-                                <!-- Horas = diferencia en ms / 3600000 -->
-                                <span class="monto" th:if="${a.entrada != null and a.salida != null}"
+                            <td class="fw-700">
+                                <span th:if="${a.entrada != null and a.salida != null}"
                                     th:text="${#numbers.formatDecimal((a.salida.time - a.entrada.time) / 3600000.0, 1, 'POINT', 1, 'POINT') + ' h'}">
                                     0.0 h
                                 </span>
                             </td>
-                            <td>
-                                <span class="tipo-badge" th:text="${a.idTipoAsistencia}">-</span>
+                            <td class="text-center">
+                                <span class="badge-pill" style="background: #eff6ff; color: #1e40af;"
+                                    th:text="${a.idTipoAsistencia}">-</span>
                             </td>
-                            <td>
-                                <span class="estado-badge" th:classappend="${a.idEstado == 1} ? 'activo' : 'inactivo'"
-                                    th:text="${a.idEstado == 1} ? 'Activo' : 'Inactivo'">
-                                </span>
+                            <td class="text-end">
+                                <span class="badge-pill"
+                                    th:classappend="${a.idEstado == 1} ? 'badge-active' : 'badge-inactive'"
+                                    th:text="${a.idEstado == 1} ? 'OK' : 'ERR'"></span>
                             </td>
                         </tr>
-
-                        <!-- Fila vacía -->
                         <tr th:if="${asistencias.empty}">
-                            <td colspan="7">
-                                <div class="empty-state">
-                                    <div class="empty-icon"><i class="fas fa-box-open"></i></div>
-                                    <h5>No hay registros de asistencia</h5>
-                                    <p>Cuando se registren asistencias aparecerán aquí.</p>
-                                </div>
+                            <td colspan="7" class="text-center py-5">
+                                <i class="fas fa-calendar-xmark mb-3 opacity-20" style="font-size: 3rem;"></i>
+                                <h5 class="opacity-50">No hay registros hoy</h5>
                             </td>
                         </tr>
                     </tbody>
@@ -251,9 +668,7 @@
     </main>
 
     <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        crossorigin="anonymous"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

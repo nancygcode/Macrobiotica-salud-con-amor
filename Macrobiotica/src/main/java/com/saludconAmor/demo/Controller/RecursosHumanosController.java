@@ -61,31 +61,33 @@ public class RecursosHumanosController {
     // ── Helper: carga métricas y listas de apoyo ─────────────────────────────
     private void cargarModeloBase(Model model) {
         // KPIs
-        long totalEmpleados      = usuarioRepository.findByIdTipoUsuario(2L).size();
-        long totalRegistros      = asistenciaService.obtenerTotalRegistros();
-        BigDecimal totalNomina   = salarioRepository.obtenerTotalNomina();
+        long totalEmpleados = usuarioRepository.findByIdTipoUsuario(2L).size();
+        long totalRegistros = asistenciaService.obtenerTotalRegistros();
+        BigDecimal totalNomina = salarioRepository.obtenerTotalNomina();
         BigDecimal promedioSalario = salarioRepository.obtenerSalarioPromedio();
 
-        if (totalNomina   == null) totalNomina   = BigDecimal.ZERO;
-        if (promedioSalario == null) promedioSalario = BigDecimal.ZERO;
+        if (totalNomina == null)
+            totalNomina = BigDecimal.ZERO;
+        if (promedioSalario == null)
+            promedioSalario = BigDecimal.ZERO;
 
         // Tablas de resumen
         List<Object[]> registrosPorEmpleado = asistenciaService.obtenerRegistrosPorEmpleado();
-        List<Object[]> registrosPorTipo     = asistenciaService.obtenerRegistrosPorTipo();
-        List<Usuario>  empleados            = usuarioRepository.findByIdTipoUsuario(2L);
+        List<Object[]> registrosPorTipo = asistenciaService.obtenerRegistrosPorTipo();
+        List<Usuario> empleados = usuarioRepository.findByIdTipoUsuario(2L);
 
         // Listas para filtros
-        List<?> tipos   = tipoAsistenciaRepository.findAll();
+        List<?> tipos = tipoAsistenciaRepository.findAll();
         List<?> estados = estadoRepository.findAll();
 
-        model.addAttribute("totalEmpleados",      totalEmpleados);
-        model.addAttribute("totalRegistros",       totalRegistros);
-        model.addAttribute("totalNomina",          totalNomina);
-        model.addAttribute("promedioSalario",      promedioSalario.setScale(2, RoundingMode.HALF_UP));
+        model.addAttribute("totalEmpleados", totalEmpleados);
+        model.addAttribute("totalRegistros", totalRegistros);
+        model.addAttribute("totalNomina", totalNomina);
+        model.addAttribute("promedioSalario", promedioSalario.setScale(2, RoundingMode.HALF_UP));
         model.addAttribute("registrosPorEmpleado", registrosPorEmpleado);
-        model.addAttribute("registrosPorTipo",     registrosPorTipo);
-        model.addAttribute("empleados",            empleados);
-        model.addAttribute("tipos",                tipos);
-        model.addAttribute("estados",              estados);
+        model.addAttribute("registrosPorTipo", registrosPorTipo);
+        model.addAttribute("empleados", empleados);
+        model.addAttribute("tipos", tipos);
+        model.addAttribute("estados", estados);
     }
 }
