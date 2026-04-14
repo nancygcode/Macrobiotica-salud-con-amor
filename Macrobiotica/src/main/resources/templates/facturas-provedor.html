@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Facturas Proveedores - Salud con Amor</title>
-    
+
     <!-- Bootstrap and Fonts for standalone functionality -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <style>
         :root {
             --primary-bg: #f8fafc;
@@ -181,7 +183,8 @@
             margin-bottom: 0.5rem;
         }
 
-        .form-control, .form-select {
+        .form-control,
+        .form-select {
             border-radius: 10px;
             border: 1px solid #d1d5db;
             padding: 0.6rem 1rem;
@@ -190,11 +193,12 @@
             box-shadow: var(--shadow-sm);
         }
 
-        .form-control:focus, .form-select:focus {
+        .form-control:focus,
+        .form-select:focus {
             border-color: var(--accent-green);
             box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
         }
-        
+
         .modal-footer {
             border-top: 1px solid var(--border-color);
             padding: 1.5rem 2rem;
@@ -209,13 +213,27 @@
 
         /* Animations */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        
+
         @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-15px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(-15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Empty State */
@@ -224,7 +242,7 @@
             text-align: center;
             color: var(--text-muted);
         }
-        
+
         .empty-icon {
             font-size: 3rem;
             color: #d1d5db;
@@ -232,13 +250,15 @@
         }
     </style>
 </head>
+
 <body>
 
     <main class="premium-container">
-        
+
         <div class="header-section">
-            <h2><i class="fas fa-file-invoice-dollar me-2" style="color: var(--accent-green);"></i> Facturas Proveedores</h2>
-            
+            <h2><i class="fas fa-file-invoice-dollar me-2" style="color: var(--accent-green);"></i> Facturas Proveedores
+            </h2>
+
             <button class="btn btn-premium" onclick="abrirModalNuevo()">
                 <i class="fas fa-plus"></i> Nueva Factura
             </button>
@@ -267,19 +287,23 @@
                                 <span th:text="${f.codigoProvedor}"></span>
                             </td>
                             <td>
-                                <div><i class="far fa-calendar-alt text-muted me-1"></i> <span th:text="${#calendars.format(f.fechaCompra, 'dd/MM/yyyy')}"></span></div>
+                                <div><i class="far fa-calendar-alt text-muted me-1"></i> <span
+                                        th:text="${#calendars.format(f.fechaCompra, 'dd/MM/yyyy')}"></span></div>
                             </td>
                             <td>
-                                <div><i class="far fa-clock text-muted me-1"></i> <span th:text="${#calendars.format(f.fechaVencimiento, 'dd/MM/yyyy')}"></span></div>
+                                <div><i class="far fa-clock text-muted me-1"></i> <span
+                                        th:text="${#calendars.format(f.fechaVencimiento, 'dd/MM/yyyy')}"></span></div>
                             </td>
                             <td>
-                                <span class="fw-bold" style="color: var(--accent-green);" th:text="'₡' + ${#numbers.formatDecimal(f.pagoTotal, 1, 2)}"></span>
+                                <span class="fw-bold" style="color: var(--accent-green);"
+                                    th:text="'₡' + ${#numbers.formatDecimal(f.pagoTotal, 1, 2)}"></span>
                             </td>
                             <td>
                                 <span class="status-badge" th:text="${f.idEstado}"></span>
                             </td>
                             <td class="text-center">
-                                <button class="btn btn-action" th:onclick="'abrirModalEditar(' + ${f.numeroFactura} + ')'" title="Editar">
+                                <button class="btn btn-action"
+                                    th:onclick="'abrirModalEditar(' + ${f.numeroFactura} + ')'" title="Editar">
                                     <i class="fas fa-edit"></i>
                                 </button>
                             </td>
@@ -305,74 +329,87 @@
             <div class="modal-content">
                 <form th:action="@{/facturas-proveedor/guardar}" th:object="${factura}" method="post">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="facturaModalLabel"><i class="fas fa-file-invoice text-success me-2"></i> Factura de Proveedor</h5>
+                        <h5 class="modal-title" id="facturaModalLabel"><i
+                                class="fas fa-file-invoice text-success me-2"></i> Factura de Proveedor</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    
+
                     <div class="modal-body">
                         <!-- Campo oculto para el ID -->
                         <input type="hidden" th:field="*{numeroFactura}" id="numeroFactura">
 
                         <div class="row g-4">
                             <div class="col-md-6">
-                                <label for="codigoProvedor" class="form-label"><i class="fas fa-truck text-muted me-1"></i> Proveedor</label>
+                                <label for="codigoProvedor" class="form-label"><i
+                                        class="fas fa-truck text-muted me-1"></i> Proveedor</label>
                                 <select class="form-select" th:field="*{codigoProvedor}" id="codigoProvedor" required>
                                     <option value="">Seleccione un proveedor...</option>
-                                    <option th:each="p : ${proveedores}" th:value="${p.codigoProvedor}" th:text="${p.nombreProvedor}"></option>
+                                    <option th:each="p : ${proveedores}" th:value="${p.codigoProvedor}"
+                                        th:text="${p.nombreProvedor}"></option>
                                 </select>
                             </div>
                             <div class="col-md-6">
-                                <label for="idProducto" class="form-label"><i class="fas fa-box text-muted me-1"></i> Producto Asociado</label>
+                                <label for="idProducto" class="form-label"><i class="fas fa-box text-muted me-1"></i>
+                                    Producto Asociado</label>
                                 <select class="form-select" th:field="*{idProducto}" id="idProducto" required>
                                     <option value="">Seleccione un producto...</option>
-                                    <option th:each="prod : ${productos}" th:value="${prod.codigoProducto}" th:text="${prod.nombre}"></option>
+                                    <option th:each="prod : ${productos}" th:value="${prod.codigoProducto}"
+                                        th:text="${prod.nombre}"></option>
                                 </select>
                             </div>
 
                             <div class="col-md-4">
                                 <label for="fechaCompra" class="form-label">Fecha de Compra</label>
-                                <input type="date" class="form-control" th:field="*{fechaCompra}" id="fechaCompra" required>
+                                <input type="date" class="form-control" th:field="*{fechaCompra}" id="fechaCompra"
+                                    required>
                             </div>
                             <div class="col-md-4">
                                 <label for="fechaVencimiento" class="form-label">Fecha de Vencimiento</label>
-                                <input type="date" class="form-control" th:field="*{fechaVencimiento}" id="fechaVencimiento" required>
+                                <input type="date" class="form-control" th:field="*{fechaVencimiento}"
+                                    id="fechaVencimiento" required>
                             </div>
                             <div class="col-md-4">
                                 <label for="pagoTotal" class="form-label">Monto Total (₡)</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-light">₡</span>
-                                    <input type="number" step="0.01" class="form-control" th:field="*{pagoTotal}" id="pagoTotal" required>
+                                    <input type="number" step="0.01" class="form-control" th:field="*{pagoTotal}"
+                                        id="pagoTotal" required>
                                 </div>
                             </div>
 
                             <div class="col-md-4">
                                 <label for="claveHacienda" class="form-label">Clave Hacendaria</label>
-                                <input type="number" class="form-control" th:field="*{claveHacienda}" id="claveHacienda" placeholder="Opcional">
+                                <input type="number" class="form-control" th:field="*{claveHacienda}" id="claveHacienda"
+                                    placeholder="Opcional">
                             </div>
                             <div class="col-md-4">
                                 <label for="idTipoDocumento" class="form-label">Tipo Documento</label>
                                 <select class="form-select" th:field="*{idTipoDocumento}" id="idTipoDocumento" required>
                                     <option value="">Seleccione...</option>
-                                    <option th:each="td : ${tiposDocumento}" th:value="${td.idTipoDocumento}" th:text="${td.nombre}"></option>
+                                    <option th:each="td : ${tiposDocumento}" th:value="${td.idTipoDocumento}"
+                                        th:text="${td.nombre}"></option>
                                 </select>
                             </div>
                             <div class="col-md-4">
                                 <label for="idEstado" class="form-label">Estado de la Factura</label>
                                 <select class="form-select" th:field="*{idEstado}" id="idEstado" required>
                                     <option value="">Seleccione...</option>
-                                    <option th:each="est : ${estados}" th:value="${est.idEstado}" th:text="${est.estado}"></option>
+                                    <option th:each="est : ${estados}" th:value="${est.idEstado}"
+                                        th:text="${est.estado}"></option>
                                 </select>
                             </div>
 
                             <div class="col-12">
                                 <label for="descripcion" class="form-label">Descripción o Notas Adicionales</label>
-                                <textarea class="form-control" th:field="*{descripcion}" id="descripcion" rows="3" maxlength="400" placeholder="Detalles de la factura..."></textarea>
+                                <textarea class="form-control" th:field="*{descripcion}" id="descripcion" rows="3"
+                                    maxlength="400" placeholder="Detalles de la factura..."></textarea>
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-outline-secondary"
+                            data-bs-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn btn-premium" style="border-radius: 10px;">
                             <i class="fas fa-save"></i> Guardar Factura
                         </button>
@@ -383,8 +420,9 @@
     </div>
 
     <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+
     <script th:inline="javascript">
         // Helper to format Date to YYYY-MM-DD for input[type=date]
         function formatDateForInput(dateStr) {
@@ -393,11 +431,11 @@
             if (typeof dateStr === 'string' && dateStr.length >= 10 && dateStr.includes('-')) {
                 return dateStr.substring(0, 10);
             }
-            
+
             const d = new Date(dateStr);
             // Ajustar el desfase horario si recibe timestamp u objeto JS
             d.setMinutes(d.getMinutes() + d.getTimezoneOffset());
-            
+
             let month = '' + (d.getMonth() + 1);
             let day = '' + d.getDate();
             const year = d.getFullYear();
@@ -409,14 +447,14 @@
         }
 
         let facturaModal;
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             const modalElement = document.getElementById('facturaModal');
             facturaModal = new bootstrap.Modal(modalElement);
         });
 
         function abrirModalNuevo() {
             document.getElementById('facturaModalLabel').innerHTML = '<i class="fas fa-file-invoice text-success me-2"></i> Agregar Factura de Proveedor';
-            
+
             // Limpiar formulario
             document.getElementById('numeroFactura').value = '';
             document.getElementById('codigoProvedor').value = '';
@@ -428,13 +466,13 @@
             document.getElementById('idTipoDocumento').value = '';
             document.getElementById('idEstado').value = '';
             document.getElementById('descripcion').value = '';
-            
+
             facturaModal.show();
         }
 
         function abrirModalEditar(id) {
             document.getElementById('facturaModalLabel').innerHTML = '<i class="fas fa-edit text-primary me-2"></i> Editar Factura de Proveedor';
-            
+
             // Fecth data via AJAX
             fetch('/facturas-proveedor/editar/' + id)
                 .then(response => {
@@ -453,7 +491,7 @@
                     document.getElementById('idTipoDocumento').value = data.idTipoDocumento;
                     document.getElementById('idEstado').value = data.idEstado;
                     document.getElementById('descripcion').value = data.descripcion || '';
-                    
+
                     facturaModal.show();
                 })
                 .catch(error => {
@@ -463,4 +501,5 @@
         }
     </script>
 </body>
+
 </html>

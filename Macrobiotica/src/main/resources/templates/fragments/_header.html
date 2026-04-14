@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<div xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-    th:fragment="header">
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="header">
 
     <!-- Design Tokens & Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Plus+Jakarta+Sans:wght@500;700&display=swap" rel="stylesheet">
@@ -109,33 +108,30 @@
                 <span>Macrobiótica</span>
             </a>
 
-            <!-- Center: Core Management Links (Admin/Vendedor) -->
-            <ul class="nav-links-hub" sec:authorize="hasRole('ROLE_VENDEDOR') or hasRole('ROLE_ADMIN')">
-                <li><a th:href="@{/}" th:classappend="${#httpServletRequest.requestURI == '/' ? 'active' : ''}">Inicio</a></li>
-                <li><a th:href="@{/producto/inventario}" th:classappend="${#httpServletRequest.requestURI.startsWith('/producto/inventario') ? 'active' : ''}">Inventario</a></li>
-                <li><a th:href="@{/reportes/ventas-facturacion}" th:classappend="${#httpServletRequest.requestURI.contains('reportes') ? 'active' : ''}">Reportes</a></li>
-                <li><a th:href="@{/provedores}" th:classappend="${#httpServletRequest.requestURI.contains('provedores') ? 'active' : ''}">Proveedores</a></li>
+            <!-- Center: Core Management Links -->
+            <ul class="nav-links-hub">
+                <li><a th:href="@{/}">Inicio</a></li>
+                <li><a th:href="@{/producto/inventario}">Inventario</a></li>
+                <li><a th:href="@{/reportes/ventas-facturacion}">Reportes</a></li>
+                <li><a th:href="@{/provedores}">Proveedores</a></li>
             </ul>
 
             <!-- Right: Account Actions -->
             <div class="nav-actions">
-                <!-- Customer Cart (if not admin/vendedor or for everyone) -->
-                <a th:href="@{/cart}" class="nav-user-btn position-relative" style="padding: 0.5rem 0.8rem;">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span th:if="${cartItemCount != null && cartItemCount > 0}"
-                          class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                          style="font-size: 0.6rem;"
-                          th:text="${cartItemCount}"></span>
+                <!-- Simple Cart Link -->
+                <a th:href="@{/producto/listado}" title="Catálogo" class="nav-user-btn">
+                    <i class="fas fa-shopping-basket"></i>
+                    <span>Catálogo</span>
                 </a>
 
-                <!-- User Profile -->
-                <div class="dropdown" sec:authorize="isAuthenticated()">
+                <!-- User Profile (Simplified as Security is not active) -->
+                <div class="dropdown">
                     <a href="#" class="nav-user-btn dropdown-toggle" data-bs-toggle="dropdown">
                         <i class="fas fa-circle-user fa-lg"></i>
-                        <span th:text="${usuarioActual != null ? usuarioActual.nombre : #authentication.name}">Usuario</span>
+                        <span>Admin</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg mt-3" style="border-radius: 16px; padding: 1rem;">
-                        <li><a class="dropdown-item fw-600 py-2" th:href="@{/usuario/editar}">Mi Perfil</a></li>
+                        <li><a class="dropdown-item fw-600 py-2" th:href="@{/}">Panel Principal</a></li>
                         <li><hr class="dropdown-divider opacity-10"></li>
                         <li>
                             <form th:action="@{/logout}" method="post">
@@ -144,10 +140,6 @@
                         </li>
                     </ul>
                 </div>
-
-                <a th:href="@{/login}" class="nav-user-btn" sec:authorize="!isAuthenticated()">
-                    <i class="fas fa-sign-in-alt"></i> Login
-                </a>
             </div>
         </div>
     </header>

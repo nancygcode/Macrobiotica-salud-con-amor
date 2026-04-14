@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,250 +9,251 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        crossorigin="anonymous">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- CSS propio -->
     <link rel="stylesheet" th:href="@{/css/admin-rrhh.css}">
 </head>
+
 <body>
 
-<main class="rrhh-container">
+    <main class="rrhh-container">
 
-    <!-- ══ ENCABEZADO ══ -->
-    <div class="rrhh-header">
-        <h2>
-            <i class="fas fa-users me-2" style="color: var(--accent-green);"></i>
-            Recursos Humanos &amp; Asistencia
-        </h2>
-        <a th:href="@{/}" class="btn btn-outline-secondary btn-sm">
-            <i class="fas fa-arrow-left me-1"></i> Volver al inicio
-        </a>
-    </div>
-
-    <!-- Alerta de filtro activo -->
-    <div th:if="${filtroActivo}" class="alert-filter">
-        <i class="fas fa-filter me-2"></i>
-        Mostrando: <strong th:text="${filtroActivo}">—</strong>
-        <a th:href="@{/admin/rrhh}" class="btn-reset ms-3">
-            <i class="fas fa-rotate-left me-1"></i> Ver todos
-        </a>
-    </div>
-
-    <!-- ══ KPIs ══ -->
-    <div class="kpi-grid">
-        <div class="kpi-card">
-            <div class="kpi-icon">👥</div>
-            <div class="kpi-label">Empleados Activos</div>
-            <div class="kpi-value" th:text="${totalEmpleados}">0</div>
-        </div>
-        <div class="kpi-card kpi-blue">
-            <div class="kpi-icon">📋</div>
-            <div class="kpi-label">Registros de Asistencia</div>
-            <div class="kpi-value" th:text="${totalRegistros}">0</div>
-        </div>
-        <div class="kpi-card kpi-amber">
-            <div class="kpi-icon">💵</div>
-            <div class="kpi-label">Total Nómina</div>
-            <div class="kpi-value"
-                 th:text="'₡' + ${#numbers.formatDecimal(totalNomina, 1, 'COMMA', 2, 'POINT')}">
-                ₡0.00
-            </div>
-        </div>
-        <div class="kpi-card kpi-purple">
-            <div class="kpi-icon">📊</div>
-            <div class="kpi-label">Salario Promedio</div>
-            <div class="kpi-value"
-                 th:text="'₡' + ${#numbers.formatDecimal(promedioSalario, 1, 'COMMA', 2, 'POINT')}">
-                ₡0.00
-            </div>
-        </div>
-    </div>
-
-    <!-- ══ RESÚMENES ══ -->
-    <div class="resumen-grid">
-
-        <!-- Asistencias por empleado -->
-        <div class="glass-card">
-            <div class="glass-card-header">
-                <h3><i class="fas fa-id-badge me-2 text-success"></i> Registros por Empleado</h3>
-            </div>
-            <div class="table-responsive">
-                <table class="table custom-table">
-                    <thead>
-                        <tr>
-                            <th>Cédula</th>
-                            <th>N° Registros</th>
-                            <th>Acción</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="fila : ${registrosPorEmpleado}">
-                            <td>
-                                <i class="fas fa-id-card text-muted me-1"></i>
-                                <span th:text="${fila[0]}">-</span>
-                            </td>
-                            <td>
-                                <span class="badge-count" th:text="${fila[1]}">0</span>
-                            </td>
-                            <td>
-                                <a th:href="@{/admin/rrhh/empleado/{c}(c=${fila[0]})}"
-                                   class="btn-filter-sm">
-                                    <i class="fas fa-search me-1"></i> Ver
-                                </a>
-                            </td>
-                        </tr>
-                        <tr th:if="${registrosPorEmpleado.empty}">
-                            <td colspan="3">
-                                <div class="empty-state">
-                                    <div class="empty-icon"><i class="fas fa-calendar-xmark"></i></div>
-                                    <p>Sin registros de asistencia</p>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+        <!-- ══ ENCABEZADO ══ -->
+        <div class="rrhh-header">
+            <h2>
+                <i class="fas fa-users me-2" style="color: var(--accent-green);"></i>
+                Recursos Humanos &amp; Asistencia
+            </h2>
+            <a th:href="@{/}" class="btn btn-outline-secondary btn-sm">
+                <i class="fas fa-arrow-left me-1"></i> Volver al inicio
+            </a>
         </div>
 
-        <!-- Lista de empleados -->
-        <div class="glass-card">
-            <div class="glass-card-header">
-                <h3><i class="fas fa-user-tie me-2 text-success"></i> Empleados</h3>
-                <span class="badge bg-success" th:text="${totalEmpleados} + ' empleados'">0 empleados</span>
-            </div>
-            <div class="table-responsive">
-                <table class="table custom-table">
-                    <thead>
-                        <tr>
-                            <th>Cédula</th>
-                            <th>Nombre</th>
-                            <th>Depto.</th>
-                            <th>Estado</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="emp : ${empleados}">
-                            <td th:text="${emp.cedula}">-</td>
-                            <td>
-                                <span th:text="${emp.nombre + ' ' + (emp.apellidoPaterno ?: '')}">-</span>
-                            </td>
-                            <td>
-                                <span class="badge-depto" th:text="${emp.idDepartamento}">-</span>
-                            </td>
-                            <td>
-                                <span class="estado-badge"
-                                      th:classappend="${emp.idEstado == 1} ? 'activo' : 'inactivo'"
-                                      th:text="${emp.idEstado == 1} ? 'Activo' : 'Inactivo'">
-                                </span>
-                            </td>
-                        </tr>
-                        <tr th:if="${empleados.empty}">
-                            <td colspan="4">
-                                <div class="empty-state">
-                                    <div class="empty-icon"><i class="fas fa-users-slash"></i></div>
-                                    <p>No hay empleados registrados</p>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- ══ TABLA PRINCIPAL DE ASISTENCIA ══ -->
-    <div class="glass-card">
-        <div class="glass-card-header">
-            <h3><i class="fas fa-calendar-check me-2 text-success"></i> Registros de Asistencia</h3>
-            <span class="badge bg-success" th:text="${asistencias.size()} + ' registros'">0 registros</span>
-        </div>
-
-        <!-- Filtros rápidos por tipo -->
-        <div class="filter-bar">
-            <label><i class="fas fa-filter me-1"></i> Filtrar por tipo:</label>
-            <div th:each="tipo : ${tipos}">
-                <a th:href="@{/admin/rrhh/tipo/{id}(id=${tipo.idTipoAsistencia})}"
-                   class="btn-filter"
-                   th:text="${tipo.nombre}">
-                    Tipo
-                </a>
-            </div>
-            <a th:href="@{/admin/rrhh}" class="btn-reset">
+        <!-- Alerta de filtro activo -->
+        <div th:if="${filtroActivo}" class="alert-filter">
+            <i class="fas fa-filter me-2"></i>
+            Mostrando: <strong th:text="${filtroActivo}">—</strong>
+            <a th:href="@{/admin/rrhh}" class="btn-reset ms-3">
                 <i class="fas fa-rotate-left me-1"></i> Ver todos
             </a>
         </div>
 
-        <!-- Tabla -->
-        <div class="table-responsive">
-            <table class="table custom-table">
-                <thead>
-                    <tr>
-                        <th># ID</th>
-                        <th>Cédula</th>
-                        <th>Entrada</th>
-                        <th>Salida</th>
-                        <th>Horas trabajadas</th>
-                        <th>Tipo</th>
-                        <th>Estado</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="a : ${asistencias}">
-                        <td>
-                            <span class="fw-bold" style="color:#4b5563;" th:text="${a.idAsistencia}">-</span>
-                        </td>
-                        <td>
-                            <i class="fas fa-user text-muted me-1"></i>
-                            <span th:text="${a.cedula}">-</span>
-                        </td>
-                        <td>
-                            <i class="far fa-clock text-muted me-1"></i>
-                            <span th:text="${a.entrada != null ? #dates.format(a.entrada, 'dd/MM/yyyy HH:mm') : '-'}">-</span>
-                        </td>
-                        <td>
-                            <i class="far fa-clock text-muted me-1"></i>
-                            <span th:text="${a.salida != null ? #dates.format(a.salida, 'dd/MM/yyyy HH:mm') : '-'}">-</span>
-                        </td>
-                        <td>
-                            <!-- Horas = diferencia en ms / 3600000 -->
-                            <span class="monto"
-                                  th:if="${a.entrada != null and a.salida != null}"
-                                  th:text="${#numbers.formatDecimal((a.salida.time - a.entrada.time) / 3600000.0, 1, 'POINT', 1, 'POINT') + ' h'}">
-                                0.0 h
-                            </span>
-                        </td>
-                        <td>
-                            <span class="tipo-badge" th:text="${a.idTipoAsistencia}">-</span>
-                        </td>
-                        <td>
-                            <span class="estado-badge"
-                                  th:classappend="${a.idEstado == 1} ? 'activo' : 'inactivo'"
-                                  th:text="${a.idEstado == 1} ? 'Activo' : 'Inactivo'">
-                            </span>
-                        </td>
-                    </tr>
-
-                    <!-- Fila vacía -->
-                    <tr th:if="${asistencias.empty}">
-                        <td colspan="7">
-                            <div class="empty-state">
-                                <div class="empty-icon"><i class="fas fa-box-open"></i></div>
-                                <h5>No hay registros de asistencia</h5>
-                                <p>Cuando se registren asistencias aparecerán aquí.</p>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <!-- ══ KPIs ══ -->
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-icon">👥</div>
+                <div class="kpi-label">Empleados Activos</div>
+                <div class="kpi-value" th:text="${totalEmpleados}">0</div>
+            </div>
+            <div class="kpi-card kpi-blue">
+                <div class="kpi-icon">📋</div>
+                <div class="kpi-label">Registros de Asistencia</div>
+                <div class="kpi-value" th:text="${totalRegistros}">0</div>
+            </div>
+            <div class="kpi-card kpi-amber">
+                <div class="kpi-icon">💵</div>
+                <div class="kpi-label">Total Nómina</div>
+                <div class="kpi-value" th:text="'₡' + ${#numbers.formatDecimal(totalNomina, 1, 'COMMA', 2, 'POINT')}">
+                    ₡0.00
+                </div>
+            </div>
+            <div class="kpi-card kpi-purple">
+                <div class="kpi-icon">📊</div>
+                <div class="kpi-label">Salario Promedio</div>
+                <div class="kpi-value"
+                    th:text="'₡' + ${#numbers.formatDecimal(promedioSalario, 1, 'COMMA', 2, 'POINT')}">
+                    ₡0.00
+                </div>
+            </div>
         </div>
-    </div>
 
-</main>
+        <!-- ══ RESÚMENES ══ -->
+        <div class="resumen-grid">
 
-<!-- Scripts -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+            <!-- Asistencias por empleado -->
+            <div class="glass-card">
+                <div class="glass-card-header">
+                    <h3><i class="fas fa-id-badge me-2 text-success"></i> Registros por Empleado</h3>
+                </div>
+                <div class="table-responsive">
+                    <table class="table custom-table">
+                        <thead>
+                            <tr>
+                                <th>Cédula</th>
+                                <th>N° Registros</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="fila : ${registrosPorEmpleado}">
+                                <td>
+                                    <i class="fas fa-id-card text-muted me-1"></i>
+                                    <span th:text="${fila[0]}">-</span>
+                                </td>
+                                <td>
+                                    <span class="badge-count" th:text="${fila[1]}">0</span>
+                                </td>
+                                <td>
+                                    <a th:href="@{/admin/rrhh/empleado/{c}(c=${fila[0]})}" class="btn-filter-sm">
+                                        <i class="fas fa-search me-1"></i> Ver
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr th:if="${registrosPorEmpleado.empty}">
+                                <td colspan="3">
+                                    <div class="empty-state">
+                                        <div class="empty-icon"><i class="fas fa-calendar-xmark"></i></div>
+                                        <p>Sin registros de asistencia</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Lista de empleados -->
+            <div class="glass-card">
+                <div class="glass-card-header">
+                    <h3><i class="fas fa-user-tie me-2 text-success"></i> Empleados</h3>
+                    <span class="badge bg-success" th:text="${totalEmpleados} + ' empleados'">0 empleados</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table custom-table">
+                        <thead>
+                            <tr>
+                                <th>Cédula</th>
+                                <th>Nombre</th>
+                                <th>Depto.</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="emp : ${empleados}">
+                                <td th:text="${emp.cedula}">-</td>
+                                <td>
+                                    <span th:text="${emp.nombre + ' ' + (emp.apellidoPaterno ?: '')}">-</span>
+                                </td>
+                                <td>
+                                    <span class="badge-depto" th:text="${emp.idDepartamento}">-</span>
+                                </td>
+                                <td>
+                                    <span class="estado-badge"
+                                        th:classappend="${emp.idEstado == 1} ? 'activo' : 'inactivo'"
+                                        th:text="${emp.idEstado == 1} ? 'Activo' : 'Inactivo'">
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr th:if="${empleados.empty}">
+                                <td colspan="4">
+                                    <div class="empty-state">
+                                        <div class="empty-icon"><i class="fas fa-users-slash"></i></div>
+                                        <p>No hay empleados registrados</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ══ TABLA PRINCIPAL DE ASISTENCIA ══ -->
+        <div class="glass-card">
+            <div class="glass-card-header">
+                <h3><i class="fas fa-calendar-check me-2 text-success"></i> Registros de Asistencia</h3>
+                <span class="badge bg-success" th:text="${asistencias.size()} + ' registros'">0 registros</span>
+            </div>
+
+            <!-- Filtros rápidos por tipo -->
+            <div class="filter-bar">
+                <label><i class="fas fa-filter me-1"></i> Filtrar por tipo:</label>
+                <div th:each="tipo : ${tipos}">
+                    <a th:href="@{/admin/rrhh/tipo/{id}(id=${tipo.idTipoAsistencia})}" class="btn-filter"
+                        th:text="${tipo.nombre}">
+                        Tipo
+                    </a>
+                </div>
+                <a th:href="@{/admin/rrhh}" class="btn-reset">
+                    <i class="fas fa-rotate-left me-1"></i> Ver todos
+                </a>
+            </div>
+
+            <!-- Tabla -->
+            <div class="table-responsive">
+                <table class="table custom-table">
+                    <thead>
+                        <tr>
+                            <th># ID</th>
+                            <th>Cédula</th>
+                            <th>Entrada</th>
+                            <th>Salida</th>
+                            <th>Horas trabajadas</th>
+                            <th>Tipo</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="a : ${asistencias}">
+                            <td>
+                                <span class="fw-bold" style="color:#4b5563;" th:text="${a.idAsistencia}">-</span>
+                            </td>
+                            <td>
+                                <i class="fas fa-user text-muted me-1"></i>
+                                <span th:text="${a.cedula}">-</span>
+                            </td>
+                            <td>
+                                <i class="far fa-clock text-muted me-1"></i>
+                                <span
+                                    th:text="${a.entrada != null ? #dates.format(a.entrada, 'dd/MM/yyyy HH:mm') : '-'}">-</span>
+                            </td>
+                            <td>
+                                <i class="far fa-clock text-muted me-1"></i>
+                                <span
+                                    th:text="${a.salida != null ? #dates.format(a.salida, 'dd/MM/yyyy HH:mm') : '-'}">-</span>
+                            </td>
+                            <td>
+                                <!-- Horas = diferencia en ms / 3600000 -->
+                                <span class="monto" th:if="${a.entrada != null and a.salida != null}"
+                                    th:text="${#numbers.formatDecimal((a.salida.time - a.entrada.time) / 3600000.0, 1, 'POINT', 1, 'POINT') + ' h'}">
+                                    0.0 h
+                                </span>
+                            </td>
+                            <td>
+                                <span class="tipo-badge" th:text="${a.idTipoAsistencia}">-</span>
+                            </td>
+                            <td>
+                                <span class="estado-badge" th:classappend="${a.idEstado == 1} ? 'activo' : 'inactivo'"
+                                    th:text="${a.idEstado == 1} ? 'Activo' : 'Inactivo'">
+                                </span>
+                            </td>
+                        </tr>
+
+                        <!-- Fila vacía -->
+                        <tr th:if="${asistencias.empty}">
+                            <td colspan="7">
+                                <div class="empty-state">
+                                    <div class="empty-icon"><i class="fas fa-box-open"></i></div>
+                                    <h5>No hay registros de asistencia</h5>
+                                    <p>Cuando se registren asistencias aparecerán aquí.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
 
 </body>
+
 </html>

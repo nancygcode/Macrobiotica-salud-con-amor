@@ -18,7 +18,8 @@ public class Producto implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column(name = "CODIGO_PRODUCTO", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "CODIGO_PRODUCTO")
     private Long codigoProducto;
 
     @Column(name = "NOMBRE", length = 250)
@@ -31,9 +32,11 @@ public class Producto implements Serializable {
     private String descripcion;
 
     @Column(name = "FECHA_VENCIMIENTO")
+    @Temporal(TemporalType.DATE)
     private Date fechaVencimiento;
 
     @Column(name = "FECHA_EMISION")
+    @Temporal(TemporalType.DATE)
     private Date fechaEmision;
 
     @Column(name = "STOCK", nullable = false)
